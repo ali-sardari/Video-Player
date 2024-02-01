@@ -8,8 +8,7 @@ body {
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .ejoy-sub-clzz {
@@ -19,14 +18,13 @@ code {
 
 .player-container {
     position: relative;
-    width: 100%;
+    width: 98%;
     display: flex;
     justify-content: center;
 }
 
 .video {
     width: 100%;
-    margin: 10px;
 }
 
 .subtitle {
@@ -38,4 +36,9 @@ code {
     bottom: 50px; /* Set the subtitle to the bottom */
     padding: 5px; /* Add some padding for better readability */
     box-sizing: border-box; /* Include padding and border in total width/height */
+}
+
+.ReactModal__Content {
+    width: fit-content;
+    height: fit-content;
 }

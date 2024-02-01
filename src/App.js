@@ -1,11 +1,21 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import SubtitlesParser from 'subtitles-parser';
+import Modal from 'react-modal';
 
 const App = () => {
     const videoRef = useRef(null);
     const [subtitleText, setSubtitleText] = useState('');
     const [subtitleData, setSubtitleData] = useState([]);
     const [currentTime, setCurrentTime] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const loadSubtitle = (file) => {
         const reader = new FileReader();
@@ -28,9 +38,7 @@ const App = () => {
         if (e.target.files.length > 0) {
             const videoFile = e.target.files[0];
             videoRef.current.src = URL.createObjectURL(videoFile);
-            videoRef.current.load(); // Add this line to reload the video and trigger the update
-
-            console.log(videoRef.current.src);
+            videoRef.current.load();
         }
     };
 
@@ -48,7 +56,6 @@ const App = () => {
         return seconds + milliseconds;
     };
 
-
     const renderSubtitle = () => {
         const currentSubtitle = subtitleData.find(
             (subtitle) =>
@@ -61,16 +68,6 @@ const App = () => {
 
     return (
         <div>
-            <label>
-                Choose Video:
-                <input type="file" accept=".mp4" onChange={handleVideoChange}/>
-            </label>
-            <br/>
-            <label>
-                Choose Subtitle:
-                <input type="file" accept=".srt" onChange={handleSubtitleChange}/>
-            </label>
-            <br/>
             <div className='player-container'>
                 <video
                     className='video'
@@ -82,6 +79,21 @@ const App = () => {
                 </video>
                 <div className='subtitle'>{renderSubtitle()}</div>
             </div>
+            <button onClick={openModal}>Open Upload Modal</button>
+            <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
+                <h2>Upload Components</h2>
+                <label>
+                    Choose Video:
+                    <input type="file" accept=".mp4" onChange={handleVideoChange}/>
+                </label>
+                <br/>
+                <label>
+                    Choose Subtitle:
+                    <input type="file" accept=".srt" onChange={handleSubtitleChange}/>
+                </label>
+                <br/>
+                <button onClick={closeModal}>Close</button>
+            </Modal>
         </div>
     );
 };
