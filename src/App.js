@@ -4,7 +4,6 @@ import Modal from 'react-modal';
 
 const App = () => {
     const videoRef = useRef(null);
-    const [subtitleText, setSubtitleText] = useState('');
     const [subtitleData, setSubtitleData] = useState([]);
     const [currentTime, setCurrentTime] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
