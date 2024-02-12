@@ -5,6 +5,7 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background: black;
 }
 
 code {
@@ -18,13 +19,14 @@ code {
 
 .player-container {
     position: relative;
-    width: 98%;
+    width: 100%;
     display: flex;
     justify-content: center;
 }
 
 .video {
     width: 100%;
+    background: black;
 }
 
 .subtitle {
