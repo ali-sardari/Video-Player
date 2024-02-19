@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import SubtitlesParser from 'subtitles-parser';
 import Modal from 'react-modal';
 
 const App = () => {
     const videoRef = useRef(null);
-    const [subtitleData, setSubtitleData] = useState([]);
+    const [subtitleEnData, setSubtitleEnData] = useState([]);
+    const [subtitleFaData, setSubtitleFaData] = useState([]);
     const [currentTime, setCurrentTime] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -16,20 +17,37 @@ const App = () => {
         setIsModalOpen(false);
     };
 
-    const loadSubtitle = (file) => {
+    const loadSubtitleEn = (file) => {
         const reader = new FileReader();
 
         reader.onload = (e) => {
-            const subtitles = SubtitlesParser.fromSrt(e.target.result);
-            setSubtitleData(subtitles);
+            const subtitle = SubtitlesParser.fromSrt(e.target.result);
+            setSubtitleEnData(subtitle);
         };
 
         reader.readAsText(file);
     };
 
-    const handleSubtitleChange = (e) => {
+    const loadSubtitleFa = (file) => {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const subtitle = SubtitlesParser.fromSrt(e.target.result);
+            setSubtitleFaData(subtitle);
+        };
+
+        reader.readAsText(file);
+    };
+
+    const handleSubtitleEnChange = (e) => {
         if (e.target.files.length > 0) {
-            loadSubtitle(e.target.files[0]);
+            loadSubtitleEn(e.target.files[0]);
+        }
+    };
+
+    const handleSubtitleFaChange = (e) => {
+        if (e.target.files.length > 0) {
+            loadSubtitleFa(e.target.files[0]);
         }
     };
 
@@ -55,8 +73,18 @@ const App = () => {
         return seconds + milliseconds;
     };
 
-    const renderSubtitle = () => {
-        const currentSubtitle = subtitleData.find(
+    const renderSubtitleEn = () => {
+        const currentSubtitle = subtitleEnData.find(
+            (subtitle) =>
+                currentTime >= timeToSeconds(subtitle.startTime) &&
+                currentTime <= timeToSeconds(subtitle.endTime)
+        );
+
+        return currentSubtitle ? currentSubtitle.text : '';
+    };
+
+    const renderSubtitleFa = () => {
+        const currentSubtitle = subtitleFaData.find(
             (subtitle) =>
                 currentTime >= timeToSeconds(subtitle.startTime) &&
                 currentTime <= timeToSeconds(subtitle.endTime)
@@ -76,19 +104,24 @@ const App = () => {
                 >
                     <source src="" type="video/mp4"/>
                 </video>
-                <div className='subtitle'>{renderSubtitle()}</div>
+                <div className='subtitle-en'>{renderSubtitleEn()}</div>
+                <div className='subtitle-fa'>{renderSubtitleFa()}</div>
             </div>
             <button onClick={openModal}>Open Upload Modal</button>
             <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
                 <h2>Upload Components</h2>
                 <label>
                     Choose Video:
-                    <input type="file" accept=".mp4" onChange={handleVideoChange}/>
+                    <input type="file" accept=".flv, .mp4, .mkv" onChange={handleVideoChange}/>
                 </label>
                 <br/>
                 <label>
-                    Choose Subtitle:
-                    <input type="file" accept=".srt" onChange={handleSubtitleChange}/>
+                    Choose Subtitle(EN):
+                    <input type="file" accept=".srt" onChange={handleSubtitleEnChange}/>
+                </label>
+                <label>
+                    Choose Subtitle(FA):
+                    <input type="file" accept=".srt" onChange={handleSubtitleFaChange}/>
                 </label>
                 <br/>
                 <button onClick={closeModal}>Close</button>
