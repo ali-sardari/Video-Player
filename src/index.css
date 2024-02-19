@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -6,6 +10,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: black;
+    overflow: hidden;
 }
 
 code {
@@ -22,6 +27,7 @@ code {
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .video {
@@ -30,22 +36,26 @@ code {
 }
 
 .subtitles {
-    max-width: 80%;
-    align-items: center;
+    align-self: end;
+    align-content: center;
+    max-width: 400px;
+    /* align-items: center; */
     display: flex;
     flex-direction: column;
     position: absolute;
-    font-size: 24px;
-    bottom: 80px; /* Set the subtitle to the bottom */
-    padding: 5px; /* Add some padding for better readability */
-    box-sizing: border-box; /* Include padding and border in total width/height */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    font-size: 1.5rem;
+    margin-bottom: 100px !important;
+    padding: 5px;
+    box-sizing: border-box;
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    z-index: 20;
 }
 
 .subtitle-en {
     color: white;
     visibility: visible;
-    background: rgba(8, 8, 8, 0.2);
+    background: rgba(8, 8, 8, 0.33);
     padding: 5px; /* Add some padding for better readability */
     box-sizing: border-box; /* Include padding and border in total width/height */
 }
@@ -55,7 +65,7 @@ code {
     direction: rtl;
     color: #f5ff76;
     visibility: visible;
-    background: rgba(8, 8, 8, 0.2);
+    background: rgba(8, 8, 8, 0.33);
     padding: 5px; /* Add some padding for better readability */
     box-sizing: border-box; /* Include padding and border in total width/height */
 }
@@ -65,7 +75,211 @@ code {
     height: fit-content;
 }
 
+/*---------------------------------------------*/
 
+.App {
+    text-align: center;
+}
+
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    /*direction: rtl;*/
+    font-family: IRANSans, serif;
+}
+
+.z-player {
+    width: 99vw;
+    height: 99vh;
+    position: relative;
+}
+
+.nex-subtitle {
+    font-size: 24px;
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    opacity: 0.5;
+    transition: 0.2s;
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+
+.nex-hide-cursor .logo {
+    display: none;
+}
+
+.return-to-post {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: rgb(255 255 255 / 20%);
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    /*direction: rtl;*/
+    line-height: 2.2;
+    align-items: center;
+    text-align: right;
+    font-family: IRANSans, serif;
+    opacity: 0.5;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0;
+    width: 60px;
+    font-size: 12px;
+
+}
+
+.post-title {
+    font-size: 14px;
+}
+
+.return-to-post:hover {
+    opacity: 0.8;
+    padding-left: 10px !important;
+    width: auto;
+}
+
+.return-to-post img {
+    width: 60px;
+    margin-left: 15px;
+}
+
+.nex-hide-cursor .return-to-post {
+    display: none;
+}
+
+.nex-subtitle {
+    font-weight: bold;
+    font-size: 18px;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, .8), 0 -1px 4px rgba(0, 0, 0, .8) !important;
+    margin-bottom: 16px !important;
+    /*direction: rtl;*/
+}
+
+@media screen and (min-width: 400px) {
+    .nex-subtitle {
+        font-size: 24px !important;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .nex-subtitle {
+        font-size: 26px !important;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .nex-subtitle {
+        font-size: 36px !important;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .nex-subtitle {
+        font-size: 44px !important;
+    }
+}
+
+.go-to-next {
+    display: inline-block;
+    position: absolute;
+    right: 22px;
+    transform: translateX(-50%);
+    bottom: 70px;
+    background: rgba(0, 0, 0, .2);
+    color: #fff;
+    padding: 6px 12px !important;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: 0.3s;
+
+}
+
+.nex-hide-cursor .go-to-next {
+    display: none !important;
+}
+
+.go-to-next span {
+    display: inline-block
+}
+
+.go-to-next svg {
+    margin-top: 2px;
+    float: right;
+    margin-left: 10px;
+    transition: 0.3s;
+    stroke: white;
+}
+
+.go-to-next:hover {
+    background: rgb(255, 173, 0);
+    color: #000;
+    padding: 6px 18px !important;
+}
+
+.go-to-next:hover svg {
+    fill: #000;
+    stroke: black;
+    margin-left: 14px
+}
+
+@media screen and (max-width: 540px) {
+    .go-to-next {
+        display: none;
+    }
+}
+
+/*--------------------------------*/
 
 body {
     overflow: hidden;
@@ -103,6 +317,7 @@ body {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     touch-action: manipulation;
     -ms-high-contrast-adjust: none;
+    justify-content: center;
 }
 
 .nex-video-player * {
@@ -480,6 +695,68 @@ body {
     transition: margin 0.2s cubic-bezier(0.4, 0, 1, 1), width 0.2s cubic-bezier(0.4, 0, 1, 1);
     overflow: hidden;
 }
+
+.nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel input{
+width: inherit;
+}
+
+
+
+
+/*-----------------------*/
+/* YourComponent.css */
+
+.nex-volume-panel {
+    position: relative;
+    width: 80px;
+    margin-left: 8px;
+}
+
+.nex-volume-slider {
+    width: 100%;
+    height: 4px;
+    -webkit-appearance: none;
+    background: #ddd;
+    border-radius: 2px;
+    outline: none;
+}
+
+.nex-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.nex-volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: #333;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Optional: Adjust the color of the volume icon */
+/*.nex-icon-volume path {*/
+/*    fill: #333;*/
+/*}*/
+
+/* Optional: Adjust the color of the muted icon */
+.nex-icon-volume-muted path {
+    fill: #aaa; /* Use a muted color */
+}
+
+
+
+
+
+
+/*------------------------------*/
+
+
 
 .nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel .nex-volume-slider-handle {
     position: absolute;
@@ -1053,297 +1330,4 @@ button[aria-label][data-balloon-pos] {
 .sync-btn:focus {
     background: #00a1d6;
 
-}
-
-
-.nex-video-player .nex-bottom {
-    position: absolute;
-    z-index: 60;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 100px;
-    padding: 55px 10px 0;
-    opacity: 0;
-    visibility: hidden;
-    -webkit-transition: all .2s ease-in-out;
-    transition: all .2s ease-in-out;
-    pointer-events: none;
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==) repeat-x bottom
-}
-
-.nex-video-player .nex-bottom .nex-progress {
-    position: relative;
-    pointer-events: auto
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress {
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    height: 8px;
-    cursor: pointer
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress .nex-control-progress-inner {
-    position: relative;
-    height: 50%;
-    width: 100%;
-    background: hsla(0, 0%, 100%, .2)
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress .nex-control-progress-inner .nex-progress-loaded {
-    position: absolute;
-    z-index: 10;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    width: 0;
-    background: hsla(0, 0%, 100%, .4)
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress .nex-control-progress-inner .nex-progress-played {
-    position: absolute;
-    z-index: 20;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    width: 0
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress .nex-control-progress-inner .nex-progress-highlight {
-    position: absolute;
-    z-index: 30;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    pointer-events: none
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress .nex-control-progress-inner .nex-progress-highlight span {
-    display: inline-block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 7px;
-    height: 100%;
-    background: #fff;
-    pointer-events: auto
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress .nex-control-progress-inner .nex-progress-indicator {
-    display: none;
-    position: absolute;
-    z-index: 40;
-    top: -4px;
-    left: -6.5px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress .nex-control-progress-inner .nex-progress-indicator.nex-show-indicator {
-    display: block
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress .nex-control-progress-inner .nex-progress-tip {
-    display: none;
-    position: absolute;
-    z-index: 50;
-    top: -25px;
-    left: 0;
-    height: 20px;
-    padding: 0 5px;
-    line-height: 20px;
-    color: #fff;
-    font-size: 12px;
-    text-align: center;
-    background: rgba(0, 0, 0, .7);
-    border-radius: 3px;
-    font-weight: 700;
-    white-space: nowrap
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress:hover .nex-control-progress-inner {
-    height: 100%
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-progress:hover .nex-control-progress-inner .nex-progress-indicator, .nex-video-player .nex-bottom .nex-progress .nex-control-progress:hover .nex-control-progress-inner .nex-progress-tip {
-    display: block
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-thumbnails {
-    display: none;
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    pointer-events: none;
-    background-color: rgba(0, 0, 0, .7)
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-loop {
-    display: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none
-}
-
-.nex-video-player .nex-bottom .nex-progress .nex-control-loop .nex-loop-point {
-    position: absolute;
-    left: 0;
-    top: -2px;
-    width: 2px;
-    height: 8px;
-    background: hsla(0, 0%, 100%, .75)
-}
-
-.nex-video-player .nex-bottom .nex-controls {
-    position: relative;
-    pointer-events: auto;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    height: 40px;
-    padding: 5px 0
-}
-
-.nex-video-player .nex-bottom .nex-controls, .nex-video-player .nex-bottom .nex-controls .nex-controls-left, .nex-video-player .nex-bottom .nex-controls .nex-controls-right {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control {
-    opacity: .9;
-    font-size: 12px;
-    height: 36px;
-    min-width: 36px;
-    line-height: 36px;
-    text-align: center;
-    cursor: pointer;
-    white-space: nowrap
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control .nex-icon {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    float: left;
-    height: 36px;
-    width: 36px
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control:hover {
-    opacity: 1
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-onlyText {
-    padding: 0 10px
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel {
-    position: relative;
-    float: left;
-    width: 0;
-    height: 100%;
-    -webkit-transition: margin .2s cubic-bezier(.4, 0, 1, 1), width .2s cubic-bezier(.4, 0, 1, 1);
-    transition: margin .2s cubic-bezier(.4, 0, 1, 1), width .2s cubic-bezier(.4, 0, 1, 1);
-    overflow: hidden
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel .nex-volume-slider-handle {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 12px;
-    height: 12px;
-    border-radius: 12px;
-    margin-top: -6px;
-    background: #fff
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel .nex-volume-slider-handle:before {
-    left: -54px;
-    background: #fff
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel .nex-volume-slider-handle:after {
-    left: 6px;
-    background: hsla(0, 0%, 100%, .2)
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel .nex-volume-slider-handle:after, .nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel .nex-volume-slider-handle:before {
-    content: "";
-    position: absolute;
-    display: block;
-    top: 50%;
-    height: 3px;
-    margin-top: -2px;
-    width: 60px
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-volume:hover .nex-volume-panel {
-    width: 60px
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-quality {
-    position: relative;
-    z-index: 30
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-quality .nex-qualitys {
-    display: none;
-    position: absolute;
-    bottom: 35px;
-    width: 100px;
-    padding: 5px 0;
-    text-align: center;
-    color: #fff;
-    background: rgba(0, 0, 0, .8);
-    border-radius: 3px
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-quality .nex-qualitys .nex-quality-item {
-    height: 30px;
-    line-height: 30px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-shadow: 0 0 2px rgba(0, 0, 0, .5)
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-quality .nex-qualitys .nex-quality-item:hover {
-    background-color: hsla(0, 0%, 100%, .1)
-}
-
-.nex-video-player .nex-bottom .nex-controls .nex-control-quality:hover .nex-qualitys {
-    display: block
 }
