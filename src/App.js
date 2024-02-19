@@ -17,37 +17,30 @@ const App = () => {
         setIsModalOpen(false);
     };
 
-    const loadSubtitleEn = (file) => {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            const subtitle = SubtitlesParser.fromSrt(e.target.result);
-            setSubtitleEnData(subtitle);
-        };
-
-        reader.readAsText(file);
-    };
-
-    const loadSubtitleFa = (file) => {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            const subtitle = SubtitlesParser.fromSrt(e.target.result);
-            setSubtitleFaData(subtitle);
-        };
-
-        reader.readAsText(file);
-    };
-
+    //-------------------------------------------------------
     const handleSubtitleEnChange = (e) => {
         if (e.target.files.length > 0) {
-            loadSubtitleEn(e.target.files[0]);
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const subtitle = SubtitlesParser.fromSrt(e.target.result, false);
+                setSubtitleEnData(subtitle);
+            };
+
+            reader.readAsText(e.target.files[0]);
         }
     };
 
     const handleSubtitleFaChange = (e) => {
         if (e.target.files.length > 0) {
-            loadSubtitleFa(e.target.files[0]);
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const subtitle = SubtitlesParser.fromSrt(e.target.result, false);
+                setSubtitleFaData(subtitle);
+            };
+
+            reader.readAsText(e.target.files[0]);
         }
     };
 
@@ -58,6 +51,7 @@ const App = () => {
             videoRef.current.load();
         }
     };
+    //-------------------------------------------------------
 
     const handleTimeUpdate = () => {
         setCurrentTime(videoRef.current.currentTime);
@@ -73,6 +67,7 @@ const App = () => {
         return seconds + milliseconds;
     };
 
+    //-------------------------------------------------------
     const renderSubtitleEn = () => {
         const currentSubtitle = subtitleEnData.find(
             (subtitle) =>
@@ -93,6 +88,7 @@ const App = () => {
         return currentSubtitle ? currentSubtitle.text : '';
     };
 
+    //-------------------------------------------------------
     return (
         <div>
             <div className='player-container'>
@@ -102,10 +98,14 @@ const App = () => {
                     ref={videoRef}
                     onTimeUpdate={handleTimeUpdate}
                 >
-                    <source src="" type="video/mp4"/>
+                    {/*<source src="" type="video/mp4"/>*/}
                 </video>
-                <div className='subtitle-en'>{renderSubtitleEn()}</div>
-                <div className='subtitle-fa'>{renderSubtitleFa()}</div>
+                <div className='subtitles'>
+                    <div className='subtitle-en'>{renderSubtitleEn()}</div>
+                    <div className='subtitle-fa'>{renderSubtitleFa()}</div>
+                </div>
+
+                <div className='time'>{currentTime.toFixed(2)}</div>
             </div>
             <button onClick={openModal}>Open Upload Modal</button>
             <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
@@ -119,6 +119,7 @@ const App = () => {
                     Choose Subtitle(EN):
                     <input type="file" accept=".srt" onChange={handleSubtitleEnChange}/>
                 </label>
+                <br/>
                 <label>
                     Choose Subtitle(FA):
                     <input type="file" accept=".srt" onChange={handleSubtitleFaChange}/>
