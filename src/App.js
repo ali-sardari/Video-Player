@@ -18,7 +18,7 @@ const App = () => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [volume, setVolume] = useState(1);
-    const [isFullScreen, setFullScreen] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
     //region Modal
     const openModal = () => {
@@ -125,19 +125,30 @@ const App = () => {
         setIsMuted(videoRef.current.muted);
     }
 
-        const toggleFullScreen = () => {
-            document.documentElement.requestFullscreen()
+    const toggleFullScreen =  () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().then(() => {
+                setIsFullscreen(true);
+            });
+        } else {
+            document.exitFullscreen().then(() => {
+                setIsFullscreen(false);
+            });
+        }
 
-
-            if (!document.documentElement.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch((err) => {
-                    console.error('Error attempting to enable full screen:', err);
-                });
-            } else {
-                document.documentElement.exitFullscreen();
-            }
-            setFullScreen(!isFullScreen);
-        };
+        // if (!isFullscreen) {
+        //     document.documentElement.requestFullscreen().catch((err) => {
+        //         console.error('Error attempting to enable full screen:', err);
+        //     });
+        // } else {
+        //     document.documentElement.exitFullscreen().catch((err) => {
+        //             console.error('Error attempting to exit full screen:', err);
+        //         }
+        //     )
+        // }
+        //
+        // setIsFullscreen(!isFullscreen);
+    };
 
 
     const handleVolumeChange = (e) => {
