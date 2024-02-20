@@ -4,9 +4,7 @@
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    font-family: sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: black;
@@ -117,7 +115,6 @@ code {
 }
 
 
-
 * {
     box-sizing: border-box;
     padding: 0;
@@ -128,7 +125,7 @@ body {
     background: #000;
     color: #fff;
     /*direction: rtl;*/
-    font-family: IRANSans, serif;
+    /*font-family: IRANSans, serif;*/
 }
 
 .z-player {
@@ -169,7 +166,7 @@ body {
     line-height: 2.2;
     align-items: center;
     text-align: right;
-    font-family: IRANSans, serif;
+    /*font-family: IRANSans, serif;*/
     opacity: 0.5;
     overflow: hidden;
     white-space: nowrap;
@@ -306,7 +303,7 @@ body {
     height: 100%;
     outline: 0;
     zoom: 1;
-    font-family: Roboto, Arial, Helvetica, sans-serif;
+    /*font-family: Roboto, Arial, Helvetica, sans-serif;*/
     color: #eee;
     background-color: #000;
     text-align: left;
@@ -321,8 +318,8 @@ body {
 }
 
 .nex-video-player * {
-    margin: 0;
-    padding: 0;
+    /*margin: 0;*/
+    /*padding: 0;*/
     box-sizing: border-box;
 }
 
@@ -499,8 +496,8 @@ body {
     bottom: 0;
     height: 100px;
     padding: 55px 10px 0;
-    opacity: 0;
-    visibility: hidden;
+    /*opacity: 0;*/
+    /*visibility: hidden;*/
     transition: all 0.2s ease-in-out;
     pointer-events: none;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==) repeat-x bottom;
@@ -696,16 +693,12 @@ body {
     overflow: hidden;
 }
 
-.nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel input{
-width: inherit;
+.nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel input {
+    width: inherit;
 }
 
 
-
-
 /*-----------------------*/
-/* YourComponent.css */
-
 .nex-volume-panel {
     position: relative;
     width: 80px;
@@ -714,50 +707,17 @@ width: inherit;
 
 .nex-volume-slider {
     width: 100%;
-    height: 4px;
-    -webkit-appearance: none;
-    background: #ddd;
-    border-radius: 2px;
-    outline: none;
+    height: 6px;
+    accent-color: white;
 }
 
-.nex-volume-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    background: #ffffff;
-    border-radius: 50%;
-    cursor: pointer;
+.x-progress {
+    width: 100%;
+    height: 6px;
+    accent-color: red;
 }
-
-.nex-volume-slider::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    background: #333;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-/* Optional: Adjust the color of the volume icon */
-/*.nex-icon-volume path {*/
-/*    fill: #333;*/
-/*}*/
-
-/* Optional: Adjust the color of the muted icon */
-.nex-icon-volume-muted path {
-    fill: #aaa; /* Use a muted color */
-}
-
-
-
-
-
 
 /*------------------------------*/
-
-
-
 .nex-video-player .nex-bottom .nex-controls .nex-control-volume .nex-volume-panel .nex-volume-slider-handle {
     position: absolute;
     top: 50%;
@@ -827,7 +787,7 @@ width: inherit;
     display: block;
 }
 
-.nex-video-player.nex-control-show .nex-bottom, .nex-video-player.nex-hover .nex-bottom {
+.nex-video-player.nex-control-show, .nex-video-player.nex-hover {
     opacity: 1;
     visibility: visible;
 }
