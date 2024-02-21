@@ -225,23 +225,20 @@ const App = () => {
         setIsShowHideSubtitles(!isShowHideSubtitles);
     }
 
-   const toggleShowHideSettings = (e) => {
-       e.stopPropagation(); // Stop the click event from propagating
-
-       console.log("aaaaaaaaaaa")
-       setIsShowHideSettings(!isShowHideSettings);
+    const toggleShowHideSettings = () => {
+        setIsShowHideSettings(!isShowHideSettings);
     }
-
 
     //-------------------------------------------------------
     return (
         <div className='z-player nex-auto-size flex-col'>
             <div className='nex-video-player nex-subtitle-show nex-layer-show nex-control-show'>
                 <video
-                    className='video nex-video'
+                    className='nex-video1'
                     ref={videoRef}
                     muted
                     autoPlay
+                    onDoubleClick={toggleFullScreen}
                     onClick={clickPlayPause}
                     onTimeUpdate={handleVideoTimeUpdate}
                     onLoadedMetadata={handleVideoLoadedMetadata}
@@ -264,7 +261,6 @@ const App = () => {
                                 className="x-progress"
                             />
                         </div>
-                        <div className="nex-control nex-control-loop" data-index="30"><span className="nex-loop-point"></span><span className="nex-loop-point"></span></div>
                     </div>
                     <div className="nex-controls">
                         <div className="nex-controls-left">
@@ -319,7 +315,7 @@ const App = () => {
                     </div>
                 </div>
                 <div className={`nex-settings ${isShowHideSettings ? 'visible' : 'invisible'}`} onClick={toggleShowHideSettings}>
-                    <div className={`nex-setting-inner nex-backdrop-filter ${isShowHideSettings? 'right-0':'right-[-300px]'}`}>
+                    <div className={`nex-setting-inner nex-backdrop-filter ${isShowHideSettings ? 'right-0' : 'right-[-300px]'}`}>
                         <div className="nex-setting-body">
                             <div className="nex-setting nex-setting-flip" data-index="2">
                                 <div className="nex-setting-header">Flip</div>
