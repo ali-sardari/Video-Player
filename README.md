@@ -7,9 +7,6 @@ A React-based Media player application with features like subtitles, settings, a
 - [Introduction](#introduction)
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
@@ -26,7 +23,7 @@ This React application is a Media Player with additional features such as subtit
 
 ## Installation
 
-1. Clone the repository:
+Clone the repository:
 
    ```bash
-   git clone https://github.com/ali-sardari/video-player-react.git
+   git clone https://github.com/ali-sardari/media-player-react.git
