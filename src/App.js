@@ -22,7 +22,6 @@ const App = () => {
     const [isMuted, setIsMuted] = useState(false);
     const [volume, setVolume] = useState(1);
     const [progress, setProgress] = useState(0);
-    // const [isFullscreen, setIsFullscreen] = useState(false);
     const [isMouseMoving, setIsMouseMoving] = useState(true);
     const [isShowHideSubtitles, setIsShowHideSubtitles] = useState(true);
     const [isShowHideSettings, setIsShowHideSettings] = useState(false);
@@ -416,7 +415,7 @@ const App = () => {
                     <h2 className='text-2xl font-bold mb-4'>Upload</h2>
                     <label className='mt-4 inline-block'>
                         Choose Video:
-                        <input type="file" accept=".flv, .mp4, .mkv" onChange={handleVideoChange}/>
+                        <input type="file" accept=".flv, .mp4, .mkv, .mp3" onChange={handleVideoChange}/>
                     </label>
                     <label className='mt-4 inline-block'>
                         Choose First Subtitle:
