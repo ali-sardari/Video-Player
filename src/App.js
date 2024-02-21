@@ -12,7 +12,6 @@ import {ReactComponent as UploadIcon} from './icons/upload.svg';
 
 const App = () => {
     let isActiveProgress = false;
-    let mouseMoveTimer;
     const videoRef = useRef(null);
     const [subtitleEnData, setSubtitleEnData] = useState([]);
     const [subtitleFaData, setSubtitleFaData] = useState([]);
@@ -201,26 +200,28 @@ const App = () => {
     };
     //endregion
 
-    const handleMouseMove = () => {
-        setIsMouseMoving(true);
-
-        // Reset the timer when the mouse moves
-        clearTimeout(mouseMoveTimer);
-
-        // Set a timeout to hide 'nex-bottom' after a delay
-        mouseMoveTimer = setTimeout(() => {
-            setIsMouseMoving(false);
-        }, 2000); // Adjust the delay (in milliseconds) as needed
-    };
-
     useEffect(() => {
+        let mouseMoveTimer;
+
+        const handleMouseMove = () => {
+            setIsMouseMoving(true);
+
+            // Reset the timer when the mouse moves
+            clearTimeout(mouseMoveTimer);
+
+            // Set a timeout to hide 'nex-bottom' after a delay
+            mouseMoveTimer = setTimeout(() => {
+                setIsMouseMoving(false);
+            }, 2000); // Adjust the delay (in milliseconds) as needed
+        };
+
         document.addEventListener('mousemove', handleMouseMove);
 
         // Clean up the event listener when the component is unmounted
         return () => {
             document.removeEventListener('mousemove', handleMouseMove);
         };
-    }, []);
+    }, [setIsMouseMoving]);
 
     const toggleShowHideSubtitle = () => {
         setIsShowHideSubtitles(!isShowHideSubtitles);
