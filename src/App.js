@@ -8,6 +8,7 @@ import {ReactComponent as PlayIcon} from './icons/play.svg';
 import {ReactComponent as FullScreenIcon} from './icons/fullscreen.svg';
 import {ReactComponent as SubtitleIcon} from './icons/subtitle.svg';
 import {ReactComponent as SettingsIcon} from './icons/settings.svg';
+import {ReactComponent as UploadIcon} from './icons/upload.svg';
 
 const App = () => {
     let isActiveProgress = false;
@@ -212,14 +213,14 @@ const App = () => {
         }, 2000); // Adjust the delay (in milliseconds) as needed
     };
 
-    useEffect(() => {
-        document.addEventListener('mousemove', handleMouseMove);
-
-        // Clean up the event listener when the component is unmounted
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, []);
+    // useEffect(() => {
+    //     document.addEventListener('mousemove', handleMouseMove);
+    //
+    //     // Clean up the event listener when the component is unmounted
+    //     return () => {
+    //         document.removeEventListener('mousemove', handleMouseMove);
+    //     };
+    // }, []);
 
     const toggleShowHideSubtitle = () => {
         setIsShowHideSubtitles(!isShowHideSubtitles);
@@ -244,7 +245,7 @@ const App = () => {
                     onLoadedMetadata={handleVideoLoadedMetadata}
                 >
                 </video>
-                <div className={isShowHideSubtitles ? 'subtitles' : 'hide'}>
+                <div className={isShowHideSubtitles ? 'subtitles' : 'none'}>
                     <span className='subtitle-en'>{renderSubtitleEn()}</span>
                     <span className='subtitle-fa'>{renderSubtitleFa()}</span>
                 </div>
@@ -296,6 +297,11 @@ const App = () => {
                             </div>
                         </div>
                         <div className="nex-controls-right">
+                            <div aria-label= "Upload files" className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={openModal}>
+                                <i className="nex-icon nex-icon-subtitle">
+                                    <UploadIcon/>
+                                </i>
+                            </div>
                             <div aria-label={isShowHideSubtitles ? "Hide subtitle" : "Show subtitle"} className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={toggleShowHideSubtitle}>
                                 <i className="nex-icon nex-icon-subtitle">
                                     <SubtitleIcon/>
@@ -390,7 +396,6 @@ const App = () => {
                 </div>
             </div>
             <>
-                <button className='' onClick={openModal}>Open Upload Modal</button>
                 <Modal isOpen={isModalOpen} onRequestClose={closeModal} style={{
                     content: {
                         maxWidth: '400px', // Set the maximum width of the modal content
