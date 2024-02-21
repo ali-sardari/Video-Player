@@ -213,14 +213,14 @@ const App = () => {
         }, 2000); // Adjust the delay (in milliseconds) as needed
     };
 
-    // useEffect(() => {
-    //     document.addEventListener('mousemove', handleMouseMove);
-    //
-    //     // Clean up the event listener when the component is unmounted
-    //     return () => {
-    //         document.removeEventListener('mousemove', handleMouseMove);
-    //     };
-    // }, []);
+    useEffect(() => {
+        document.addEventListener('mousemove', handleMouseMove);
+
+        // Clean up the event listener when the component is unmounted
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, []);
 
     const toggleShowHideSubtitle = () => {
         setIsShowHideSubtitles(!isShowHideSubtitles);
