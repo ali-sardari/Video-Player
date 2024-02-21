@@ -303,7 +303,6 @@ body {
     height: 100%;
     outline: 0;
     zoom: 1;
-    /*font-family: Roboto, Arial, Helvetica, sans-serif;*/
     color: #eee;
     background-color: #000;
     text-align: left;
@@ -879,21 +878,21 @@ body {
     align-items: center;
     justify-content: center;
     position: absolute;
-    z-index: 90;
+    z-index: 2000;
     left: 0;
     top: 0;
     height: 100%;
     width: 100%;
-    opacity: 0;
-    visibility: hidden;
+    opacity: 1;
+    /*visibility: visible;*/
     pointer-events: none;
     overflow: hidden;
+    /*background-color: rgba(0, 161, 214, 0.31);*/
 }
 
 .nex-video-player .nex-settings .nex-setting-inner {
     position: absolute;
     top: 0;
-    right: -300px;
     bottom: 0;
     width: 300px;
     height: 100%;
@@ -901,6 +900,7 @@ body {
     background: rgba(0, 0, 0, 0.9);
     transition: all 0.2s ease-in-out;
     overflow: auto;
+    z-index: 2200;
 }
 
 .nex-video-player .nex-settings .nex-setting-inner .nex-setting-body {
