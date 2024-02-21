@@ -23,7 +23,7 @@ const App = () => {
     const [isMuted, setIsMuted] = useState(false);
     const [volume, setVolume] = useState(1);
     const [progress, setProgress] = useState(0);
-    const [isFullscreen, setIsFullscreen] = useState(false);
+    // const [isFullscreen, setIsFullscreen] = useState(false);
     const [isMouseMoving, setIsMouseMoving] = useState(true);
     const [isShowHideSubtitles, setIsShowHideSubtitles] = useState(true);
     const [isShowHideSettings, setIsShowHideSettings] = useState(false);
@@ -171,11 +171,11 @@ const App = () => {
     const toggleFullScreen = () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().then(() => {
-                setIsFullscreen(true);
+                // setIsFullscreen(true);
             });
         } else {
             document.exitFullscreen().then(() => {
-                setIsFullscreen(false);
+                // setIsFullscreen(false);
             });
         }
     };
