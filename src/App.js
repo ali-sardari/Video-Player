@@ -13,8 +13,9 @@ import {ReactComponent as UploadIcon} from './icons/upload.svg';
 const App = () => {
     let isActiveProgress = false;
     const videoRef = useRef(null);
-    const [subtitleEnData, setSubtitleEnData] = useState([]);
-    const [subtitleFaData, setSubtitleFaData] = useState([]);
+    const [activeSubtitleIndex, setActiveSubtitleIndex] = useState(0);
+    const [subtitleFirstData, setSubtitleFirstData] = useState([]);
+    const [subtitleSecondData, setSubtitleSecondData] = useState([]);
     const [durationTime, setDurationTime] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,6 +26,7 @@ const App = () => {
     const [isMouseMoving, setIsMouseMoving] = useState(true);
     const [isShowHideSubtitles, setIsShowHideSubtitles] = useState(true);
     const [isShowHideSettings, setIsShowHideSettings] = useState(false);
+    const [isShowHideSubtitleList, setIsShowHideSubtitleList] = useState(false);
 
     //region Modal (openModal, openModal)
     const openModal = () => {
@@ -36,44 +38,43 @@ const App = () => {
     };
     //endregion
 
-    //region Handlers (handleSubtitleEnChange, handleSubtitleFaChange, handleVideoChange)
-    const handleSubtitleEnChange = (e) => {
-        if (e.target.files.length > 0) {
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-                const subtitle = SubtitlesParser.fromSrt(e.target.result, false);
-                setSubtitleEnData(subtitle);
-            };
-
-            reader.readAsText(e.target.files[0]);
-        }
-    };
-
-    const handleSubtitleFaChange = (e) => {
-        if (e.target.files.length > 0) {
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-                const subtitle = SubtitlesParser.fromSrt(e.target.result, false);
-                setSubtitleFaData(subtitle);
-            };
-
-            reader.readAsText(e.target.files[0]);
-        }
-    };
-
-    const handleVideoChange = (e) => {
+    //region Handlers (handleVideoChange, handleSubtitleFirstChange, handleSubtitleSecondChange)
+    const handleChooseMedia = (e) => {
         if (e.target.files.length > 0) {
             const videoFile = e.target.files[0];
             videoRef.current.src = URL.createObjectURL(videoFile);
             videoRef.current.load();
 
-            setProgress(0);
             setIsMuted(videoRef.current.muted);
-            setIsPlaying(false);
+            setProgress(0);
         }
     };
+
+    const handleChooseSubtitle_First = (e) => {
+        chooseSubtitle(e, 'first');
+    };
+
+    const handleChooseSubtitle_Second = (e) => {
+        chooseSubtitle(e, 'second');
+    };
+
+    function chooseSubtitle(e, type) {
+        if (e.target.files.length > 0) {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const subtitle = SubtitlesParser.fromSrt(e.target.result, false);
+
+                if (type === 'first')
+                    setSubtitleFirstData(subtitle);
+                else
+                    setSubtitleSecondData(subtitle);
+            };
+
+            reader.readAsText(e.target.files[0]);
+        }
+    }
+
     //endregion
 
     //region Video Element (handleVideoTimeUpdate, handleVideoLoadedMetadata)
@@ -85,13 +86,15 @@ const App = () => {
                 setProgress(videoRef.current.currentTime / durationTime);
             }
         }
-        if (videoRef.current.currentTime === durationTime) {
+
+        if (videoRef.current.currentTime === durationTime && durationTime !== 0) {
             setIsPlaying(false);
         }
     }
 
     function handleVideoLoadedMetadata() {
         setDurationTime(videoRef.current.duration);
+        setIsPlaying(true);
     }
 
     //endregion
@@ -124,29 +127,37 @@ const App = () => {
     //endregion
 
     //region Subtitle (renderSubtitleFirst, renderSubtitleSecond)
-    const renderSubtitleEn = () => {
-        const currentSubtitle = subtitleEnData.find(
+    const renderSubtitleFirst = () => {
+        return findSubtitleByTime(subtitleFirstData, currentTime)
+    };
+
+    const renderSubtitleSecond = () => {
+        return findSubtitleByTime(subtitleSecondData, currentTime)
+    };
+
+    function findSubtitleByTime(subtitles, time) {
+        const currentSubtitle = subtitles.find(
             (subtitle) =>
-                currentTime >= timeToSeconds(subtitle.startTime) &&
-                currentTime <= timeToSeconds(subtitle.endTime)
+                time >= timeToSeconds(subtitle.startTime) &&
+                time <= timeToSeconds(subtitle.endTime)
         );
 
         return currentSubtitle ? currentSubtitle.text : '';
-    };
+    }
 
-    const renderSubtitleFa = () => {
-        const currentSubtitle = subtitleFaData.find(
-            (subtitle) =>
-                currentTime >= timeToSeconds(subtitle.startTime) &&
-                currentTime <= timeToSeconds(subtitle.endTime)
-        );
-
-        return currentSubtitle ? currentSubtitle.text : '';
-    };
     //endregion
 
-    //region Controls (clickPlayPause, clickMuteToggle, toggleFullScreen, handleVolumeChange, handleProgressChange)
-    const clickPlayPause = () => {
+    //region Controls (
+    // handleClickPlayPause,
+    // handleClickMuteToggle,
+    // handleChangeVolume,
+    // handleChangeProgress,
+    // handleToggleFullScreen,
+    // handleToggleShowHideSettings,
+    // handleToggleShowHideSubtitle,
+    // handleToggleShowHideSubtitleList
+    // )
+    const handleClickPlayPause = () => {
         if (!videoRef.current.currentSrc) {
             alert("Please select a video file first.");
             return;
@@ -161,12 +172,32 @@ const App = () => {
         setIsPlaying(!isPlaying);
     }
 
-    const clickMuteToggle = () => {
+    const handleClickMuteToggle = () => {
         videoRef.current.muted = !videoRef.current.muted;
         setIsMuted(videoRef.current.muted);
     }
 
-    const toggleFullScreen = () => {
+    const handleChangeVolume = (e) => {
+        if (videoRef.current) {
+            const newVolume = parseFloat(e.target.value);
+            videoRef.current.volume = newVolume;
+            setVolume(newVolume);
+        }
+    };
+
+    const handleChangeProgress = (e) => {
+        isActiveProgress = true;
+
+        if (videoRef.current) {
+            const newProgress = parseFloat(e.target.value);
+            videoRef.current.currentTime = newProgress * durationTime;
+            setProgress(newProgress);
+        }
+
+        isActiveProgress = false;
+    };
+
+    const handleToggleFullScreen = () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().then(() => {
                 // setIsFullscreen(true);
@@ -178,25 +209,18 @@ const App = () => {
         }
     };
 
-    const handleVolumeChange = (e) => {
-        if (videoRef.current) {
-            const newVolume = parseFloat(e.target.value);
-            videoRef.current.volume = newVolume;
-            setVolume(newVolume);
-        }
-    };
+    const handleToggleShowHideSettings = () => {
+        setIsShowHideSettings(!isShowHideSettings);
+    }
 
-    const handleProgressChange = (e) => {
-        isActiveProgress = true;
+    const handleToggleShowHideSubtitle = () => {
+        setIsShowHideSubtitles(!isShowHideSubtitles);
+    }
 
-        if (videoRef.current) {
-            const newProgress = parseFloat(e.target.value);
-            videoRef.current.currentTime = newProgress * durationTime;
-            setProgress(newProgress);
-        }
+    const handleToggleShowHideSubtitleList = () => {
+        setIsShowHideSubtitleList(!isShowHideSubtitleList);
+    }
 
-        isActiveProgress = false;
-    };
     //endregion
 
     useEffect(() => {
@@ -222,35 +246,29 @@ const App = () => {
         };
     }, [setIsMouseMoving]);
 
-    const toggleShowHideSubtitle = () => {
-        setIsShowHideSubtitles(!isShowHideSubtitles);
-    }
 
-    const toggleShowHideSettings = () => {
-        setIsShowHideSettings(!isShowHideSettings);
-    }
-
+    console.log("isPlaying => ", isPlaying)
     //-------------------------------------------------------
     return (
         <div className='z-player nex-auto-size flex-col'>
             <div className='nex-video-player nex-subtitle-show nex-layer-show nex-control-show'>
                 <video
-                    className='nex-video1'
+                    className='nex-video'
                     ref={videoRef}
-                    muted
+                    /*muted*/
                     autoPlay
-                    onDoubleClick={toggleFullScreen}
-                    onClick={clickPlayPause}
+                    onDoubleClick={handleToggleFullScreen}
+                    onClick={handleClickPlayPause}
                     onTimeUpdate={handleVideoTimeUpdate}
                     onLoadedMetadata={handleVideoLoadedMetadata}
                 >
                 </video>
-                <div className={isShowHideSubtitles ? 'subtitles' : 'none'}>
-                    <span className='subtitle-en'>{renderSubtitleEn()}</span>
-                    <span className='subtitle-fa'>{renderSubtitleFa()}</span>
+                <div data-testid='div-show-hide-subtitle' className={isShowHideSubtitles ? 'subtitles' : 'none'}>
+                    <span className='subtitle-en'>{renderSubtitleFirst()}</span>
+                    <span className='subtitle-fa'>{renderSubtitleSecond()}</span>
                 </div>
-                <div className={`nex-bottom ${isMouseMoving ? 'opacity-90' : 'opacity-0'}`}>
-                    <div className="nex-progress">
+                <div data-testid='div-video-progress-and-controls' className={`nex-bottom ${isMouseMoving || !isPlaying ? 'opacity-90' : 'opacity-0'}`}>
+                    <div data-testid='div-video-progress-bar' className="nex-progress">
                         <div className="nex-control nex-control-progress" data-index="10">
                             <input
                                 type="range"
@@ -258,14 +276,14 @@ const App = () => {
                                 max="1"
                                 step="0.0001"
                                 value={progress}
-                                onChange={handleProgressChange}
+                                onChange={handleChangeProgress}
                                 className="x-progress"
                             />
                         </div>
                     </div>
-                    <div className="nex-controls">
+                    <div data-testid='div-video-controls' className="nex-controls">
                         <div className="nex-controls-left">
-                            <div className="nex-control nex-control-playAndPause" data-index="10" onClick={clickPlayPause}>
+                            <div className="nex-control nex-control-playAndPause" data-index="10" onClick={handleClickPlayPause}>
                                 <i aria-label="Play/Pause" className="nex-icon nex-icon-play" data-balloon-pos="up">
                                     {isPlaying ? <StopIcon/> : <PlayIcon/>}
                                 </i>
@@ -276,7 +294,7 @@ const App = () => {
                                     className="nex-icon nex-icon-volume"
                                     data-balloon-pos="up"
                                     style={{display: 'flex'}}
-                                    onClick={clickMuteToggle}
+                                    onClick={handleClickMuteToggle}
                                 >
                                     {isMuted ? <MutedIcon/> : <UnMutedIcon/>}
                                 </i>
@@ -287,7 +305,7 @@ const App = () => {
                                         max="1"
                                         step="0.01"
                                         value={volume}
-                                        onChange={handleVolumeChange}
+                                        onChange={handleChangeVolume}
                                         className="nex-volume-slider"
                                     />
                                 </div>
@@ -297,22 +315,27 @@ const App = () => {
                             </div>
                         </div>
                         <div className="nex-controls-right">
-                            <div aria-label= "Upload files" className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={openModal}>
+                            <div aria-label="Upload files" className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={openModal}>
                                 <i className="nex-icon nex-icon-subtitle">
                                     <UploadIcon/>
                                 </i>
                             </div>
-                            <div aria-label={isShowHideSubtitles ? "Hide subtitle" : "Show subtitle"} className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={toggleShowHideSubtitle}>
+                            <div aria-label={isShowHideSubtitles ? "Hide subtitle" : "Show subtitle"} className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={handleToggleShowHideSubtitle}>
                                 <i className="nex-icon nex-icon-subtitle">
                                     <SubtitleIcon/>
                                 </i>
                             </div>
-                            <div aria-label="Show setting" className="nex-control nex-control-setting" data-balloon-pos="up" data-index="40" onClick={toggleShowHideSettings}>
+                            <div aria-label={isShowHideSubtitleList ? "Show the full subtitle" : "Show the full subtitle"} className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={handleToggleShowHideSubtitleList}>
+                                <i className="nex-icon nex-icon-subtitle">
+                                    <SubtitleIcon/>
+                                </i>
+                            </div>
+                            <div aria-label="Show setting" className="nex-control nex-control-setting" data-balloon-pos="up" data-index="40" onClick={handleToggleShowHideSettings}>
                                 <i className="nex-icon nex-icon-setting">
                                     <SettingsIcon/>
                                 </i>
                             </div>
-                            <div aria-label="Fullscreen" className="nex-control nex-control-fullscreen" data-balloon-pos="up" data-index="70" onClick={toggleFullScreen}>
+                            <div aria-label="Fullscreen" className="nex-control nex-control-fullscreen" data-balloon-pos="up" data-index="70" onClick={handleToggleFullScreen}>
                                 <i className="nex-icon nex-icon-fullscreen">
                                     <FullScreenIcon/>
                                 </i>
@@ -320,7 +343,7 @@ const App = () => {
                         </div>
                     </div>
                 </div>
-                <div className={`nex-settings ${isShowHideSettings ? 'visible' : 'invisible'}`} onClick={toggleShowHideSettings}>
+                <div data-testid='div-show-hide-setting' className={`nex-settings ${isShowHideSettings ? 'visible' : 'invisible'}`} onClick={handleToggleShowHideSettings}>
                     <div className={`nex-setting-inner nex-backdrop-filter ${isShowHideSettings ? 'right-0' : 'right-[-300px]'}`}>
                         <div className="nex-setting-body">
                             <div className="nex-setting nex-setting-flip" data-index="2">
@@ -394,40 +417,61 @@ const App = () => {
                         </div>
                     </div>
                 </div>
+                <div data-testid='div-show-hide-subtitle-list' className={`nex-settings ${isShowHideSubtitleList ? 'visible' : 'invisible'} float-left`}>
+                    <div className={`nex-setting-inner nex-backdrop-filter ${isShowHideSubtitleList ? 'right-0' : 'right-[-300px]'}`}>
+                        <div className="nex-setting-body">
+                            <span onClick={handleToggleShowHideSubtitleList}>Close</span>
+                            <div className="nex-setting nex-setting-localVideo" data-index="30">
+                                <div className="nex-setting-header">Local Video</div>
+                                <div className="nex-setting-upload">
+                                    <div className="nex-upload-btn" style={{position: 'relative'}}>Open<input style={{position: 'absolute', width: '100%', height: '100%', left: '0px', top: '0px', opacity: 0}} type="file"/></div>
+                                    <div className="nex-upload-value"></div>
+                                </div>
+                            </div>
+                            <div className="nex-setting nex-setting-localSubtitle" data-index="40">
+                                <ul>
+                                    {
+                                        subtitleFirstData.map((item, index) => (
+                                            <li key={index}>{item.text}</li>
+                                        ))
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <>
-                <Modal isOpen={isModalOpen} onRequestClose={closeModal} style={{
-                    content: {
-                        maxWidth: '400px', // Set the maximum width of the modal content
-                        margin: 'auto',    // Center the modal horizontally
-                        border: '1px solid #ccc',
-                        borderRadius: '5px',
-                        background: 'rgba(65,65,65,0.8)',
-                        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-                        color: '#f4f4f4',
-                        direction: 'ltr',
-                    },
-                    overlay: {
-                        zIndex: 1000, // Set the overlay z-index to a high value
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Set the overlay background color and transparency
-                    },
-                }}>
-                    <h2 className='text-2xl font-bold mb-4'>Upload</h2>
-                    <label className='mt-4 inline-block'>
-                        Choose Video:
-                        <input type="file" accept=".flv, .mp4, .mkv, .mp3" onChange={handleVideoChange}/>
-                    </label>
-                    <label className='mt-4 inline-block'>
-                        Choose First Subtitle:
-                        <input type="file" accept=".srt" onChange={handleSubtitleEnChange}/>
-                    </label>
-                    <label className='mt-4 inline-block'>
-                        Choose Second Subtitle:
-                        <input type="file" accept=".srt" onChange={handleSubtitleFaChange}/>
-                    </label>
-                    <button className='mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={closeModal}>Apply</button>
-                </Modal>
-            </>
+            <Modal isOpen={isModalOpen} onRequestClose={closeModal} style={{
+                content: {
+                    maxWidth: '400px', // Set the maximum width of the modal content
+                    margin: 'auto',    // Center the modal horizontally
+                    border: '1px solid #ccc',
+                    borderRadius: '5px',
+                    background: 'rgba(65,65,65,0.8)',
+                    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+                    color: '#f4f4f4',
+                    direction: 'ltr',
+                },
+                overlay: {
+                    zIndex: 1000, // Set the overlay z-index to a high value
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Set the overlay background color and transparency
+                },
+            }}>
+                <h2 className='text-2xl font-bold mb-4'>Upload</h2>
+                <label className='mt-4 inline-block'>
+                    Choose Video:
+                    <input type="file" accept=".flv, .mp4, .mkv, .mp3" onChange={handleChooseMedia}/>
+                </label>
+                <label className='mt-4 inline-block'>
+                    Choose First Subtitle:
+                    <input type="file" accept=".srt" onChange={handleChooseSubtitle_First}/>
+                </label>
+                <label className='mt-4 inline-block'>
+                    Choose Second Subtitle:
+                    <input type="file" accept=".srt" onChange={handleChooseSubtitle_Second}/>
+                </label>
+                <button className='mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={closeModal}>Apply</button>
+            </Modal>
         </div>
     );
 };

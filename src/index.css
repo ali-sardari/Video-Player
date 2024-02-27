@@ -166,6 +166,7 @@ code {
     z-index: 10;
     left: 0;
     top: 0;
+    float: left;
     right: 0;
     bottom: 0;
     width: 100%;
@@ -429,6 +430,21 @@ code {
     top: 0;
     height: 100%;
     width: 100%;
+    opacity: 1;
+    overflow: hidden;
+    pointer-events: auto;
+}
+
+.nex-video-player .subtitle-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 300px;
     opacity: 1;
     overflow: hidden;
     pointer-events: auto;
