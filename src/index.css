@@ -435,20 +435,101 @@ code {
     pointer-events: auto;
 }
 
-.nex-video-player .subtitle-list {
+.subtitle-sidebar {
+    padding: 5px;
+    background: rgba(0, 0, 0, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
-    z-index: 2000;
-    left: 0;
+    z-index: 200;
+    right: 0;
     top: 0;
     height: 100%;
     width: 300px;
     opacity: 1;
+    text-align: match-parent;
     overflow: hidden;
     pointer-events: auto;
 }
+
+.subtitle-sidebar .subtitle-sidebar-inner {
+    /*position: absolute;*/
+    top: 0;
+    bottom: 0;
+    width: 300px;
+    height: 100%;
+    font-size: 12px;
+    /*background: rgba(0, 0, 0, 0.9);*/
+    transition: all 0.2s ease-in-out;
+    overflow: auto;
+    z-index: 2200;
+    pointer-events: auto;
+}
+
+.subtitle-sidebar .subtitle-sidebar-inner .subtitle-sidebar-body {
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.subtitle-sidebar .subtitle-sidebar-inner .subtitle-sidebar-body * {
+    font-family: Tahoma, serif;
+    font-size: 14px;
+}
+
+.subtitle-item {
+    width: 100%;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    display: flex;
+    flex-direction: row;
+    background: #2e2e2e;
+    align-self: center;
+}
+
+.subtitle-item-active {
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    display: flex;
+    flex-direction: row;
+    background: rgba(85, 184, 255, 0.4) !important;
+    color: #dcffef;
+    font-weight: bold;
+}
+
+.subtitle-item:hover {
+    background: #4e4e4e;
+}
+
+.subtitle-item * {
+    font-family: Tahoma, serif;
+}
+
+.subtitle-item .timeBox {
+    align-items: center;
+    cursor: pointer;
+    opacity: .5;
+    padding: 2px;
+    justify-content: center;
+    border-radius: .5rem;
+    border: .0625rem solid #d8d8d8;
+    transition: all .3s;
+}
+
+/*.timeBox .arrow-right-time {*/
+/*    width: 0;*/
+/*    height: 0;*/
+/*    border-top: .25rem solid transparent;*/
+/*    border-bottom: .25rem solid transparent;*/
+/*    border-left: 0 solid #d8d8d8;*/
+/*    transition: all .3s*/
+/*}*/
+/*.subtitle-item .textBox {*/
+/*    margin-left: 4px;*/
+/*}*/
 
 .nex-video-player .nex-settings .nex-setting-inner {
     position: absolute;
