@@ -13,7 +13,7 @@ import {ReactComponent as UploadIcon} from './icons/upload.svg';
 const App = () => {
     let isActiveProgress = false;
     const videoRef = useRef(null);
-    // const [activeSubtitleIndex, setActiveSubtitleIndex] = useState(0);
+    let activeSubtitleId = 0;
     const [subtitleFirstData, setSubtitleFirstData] = useState([]);
     const [subtitleSecondData, setSubtitleSecondData] = useState([]);
     const [durationTime, setDurationTime] = useState(0);
@@ -127,15 +127,8 @@ const App = () => {
     //endregion
 
     //region Subtitle (renderSubtitleFirst, renderSubtitleSecond)
-    const renderSubtitleFirst = () => {
-        return findSubtitleByTime(subtitleFirstData, currentTime)
-    };
-
-    const renderSubtitleSecond = () => {
-        return findSubtitleByTime(subtitleSecondData, currentTime)
-    };
-
-    let xx
+    const currentFirstSubtitle = findSubtitleByTime(subtitleFirstData, currentTime);
+    const currentSecondSubtitle = findSubtitleByTime(subtitleSecondData, currentTime);
 
     function findSubtitleByTime(subtitles, time) {
         const currentSubtitle = subtitles.find(
@@ -144,8 +137,7 @@ const App = () => {
                 time <= timeToSeconds(subtitle.endTime)
         );
 
-        if (currentSubtitle) xx = currentSubtitle.id;
-        // if (currentSubtitle) setActiveSubtitleIndex(currentSubtitle.id);
+        if (currentSubtitle) activeSubtitleId = currentSubtitle.id;
 
         return currentSubtitle ? currentSubtitle.text : '';
     }
@@ -251,8 +243,10 @@ const App = () => {
         };
     }, [setIsMouseMoving]);
 
-    function handleSwitchToVideoSubtitle(id) {
-
+    function handleSwitchToVideoSubtitle(time) {
+        if (videoRef.current) {
+            videoRef.current.currentTime = parseFloat(timeToSeconds(time));
+        }
     }
 
     //-------------------------------------------------------
@@ -273,8 +267,8 @@ const App = () => {
                         >
                         </video>
                         <div data-testid='div-show-hide-subtitle' className={isShowHideSubtitles ? 'subtitles' : 'none'}>
-                            <span className='subtitle-en'>{renderSubtitleFirst()}</span>
-                            <span className='subtitle-fa'>{renderSubtitleSecond()}</span>
+                            <span className='subtitle-en'>{currentFirstSubtitle}</span>
+                            <span className='subtitle-fa'>{currentSecondSubtitle}</span>
                         </div>
                         <div data-testid='div-video-progress-and-controls' className={`nex-bottom ${isMouseMoving || !isPlaying ? 'opacity-90' : 'opacity-0'}`}>
                             <div data-testid='div-video-progress-bar' className="nex-progress">
@@ -429,14 +423,6 @@ const App = () => {
                     </div>
                     <div data-testid='div-show-hide-subtitle-list' className={`subtitle-sidebar ${isShowHideSubtitleList ? 'visible' : 'invisible'}`}>
                         <div className={`subtitle-sidebar-inner nex-backdrop-filter ${isShowHideSubtitleList ? 'right-0' : 'right-[-300px]'}`}>
-                            <div className="flex bg-gray-200">
-                                <div className="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 flex-1">
-
-                                </div>
-                                <div className="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-
-                                </div>
-                            </div>
                             <div className="subtitle-sidebar-body">
                                 <span onClick={handleToggleShowHideSubtitleList}>Close</span>
                                 <div className="nex-setting nex-setting-localVideo" data-index="30">
@@ -451,20 +437,18 @@ const App = () => {
                                         {
                                             subtitleFirstData.map((item, index) => (
                                                 <li key={index}>
-                                                    <div className={`subtitle-item ${xx === item.id ? 'subtitle-item-active' : ''}`}>
-                                                        <div className='timeBox flex flex-row' onClick={() => handleSwitchToVideoSubtitle(item.id)}>
-                                                            <span className="flex-initial">▶</span>
-                                                            <span className="flex-initial">{item.startTime.split(',')[0]}</span>
+                                                    <div className={`subtitle-item ${activeSubtitleId === item.id ? 'subtitle-item-active' : ''} flex-1 p-1 mr-1 ml-1 mt-1`}>
+                                                        <div className='timeBox' onClick={() => handleSwitchToVideoSubtitle(item.startTime)}>
+                                                            <span className="hidden m1 transition-all">▶</span>
+                                                            <div className="flex-1 text-center">{item.startTime.split(',')[0]}</div>
                                                         </div>
-                                                        <div className='textBox ml-1 flex-1'>{item.text}</div>
+                                                        <div aria-label={subtitleSecondData ? subtitleSecondData.find((item) => item.id === activeSubtitleId)?.text : ""} className='textBox ml-1 flex-1'>{item.text}</div>
                                                     </div>
                                                 </li>
                                             ))
                                         }
                                     </ul>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
