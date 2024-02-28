@@ -454,11 +454,11 @@ const App = () => {
                                 </div>
                                 <div className="nex-setting nex-setting-playbackRate" data-index="5">
                                     <div className="nex-setting-header">Play speed: <span className="nex-subtitle-value">1</span>x</div>
-                                    <div className="nex-setting-range"><input className="nex-subtitle-range" max="2" min="0.5" step="0.25" type="range" value="1"/></div>
+                                    <div className="nex-setting-range"><input className="nex-subtitle-range" max="2" min="0.5" step="0.25" type="range" defaultValue="1"/></div>
                                 </div>
                                 <div className="nex-setting nex-setting-subtitleOffset" data-index="20">
                                     <div className="nex-setting-header">Subtitle offset time: <span className="nex-subtitle-value">0</span>s</div>
-                                    <div className="nex-setting-range"><input className="nex-subtitle-range" id="subtitleSync" max="999" min="-999" step="0.5" type="range" value="0"/>
+                                    <div className="nex-setting-range"><input className="nex-subtitle-range" id="subtitleSync" max="999" min="-999" step="0.5" type="range" defaultValue="0"/>
                                         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '8px'}}>
                                             <button className="sync-btn" data-val="-5" id="minusfivesec">-5s</button>
                                             <button className="sync-btn" data-val="-0.5" id="minushalfsec">-0.5s</button>
