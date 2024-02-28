@@ -11,10 +11,12 @@ import {ReactComponent as SettingsIcon} from './icons/settings.svg';
 import {ReactComponent as UploadIcon} from './icons/upload.svg';
 // import {AutoSizer, List} from "react-virtualized";
 
+let isActiveProgress = false;
+let lastVolume = 0;
+let activeSubtitleId = 0;
+
 const App = () => {
-    let isActiveProgress = false;
     const videoRef = useRef(null);
-    let activeSubtitleId = 0;
     const [subtitleFirstData, setSubtitleFirstData] = useState([]);
     const [subtitleSecondData, setSubtitleSecondData] = useState([]);
     const [durationTime, setDurationTime] = useState(0);
@@ -128,17 +130,17 @@ const App = () => {
     //endregion
 
     //region Subtitle (renderSubtitleFirst, renderSubtitleSecond)
-    const currentFirstSubtitle = findSubtitleByTime(subtitleFirstData, currentTime);
-    const currentSecondSubtitle = findSubtitleByTime(subtitleSecondData, currentTime);
+    const currentFirstSubtitle = findSubtitleByTime(subtitleFirstData, currentTime, 'first');
+    const currentSecondSubtitle = findSubtitleByTime(subtitleSecondData, currentTime, 'second');
 
-    function findSubtitleByTime(subtitles, time) {
+    function findSubtitleByTime(subtitles, time, type) {
         const currentSubtitle = subtitles.find(
             (subtitle) =>
                 time >= timeToSeconds(subtitle.startTime) &&
                 time <= timeToSeconds(subtitle.endTime)
         );
 
-        if (currentSubtitle) activeSubtitleId = currentSubtitle.id;
+        if (type === 'first' && currentSubtitle) activeSubtitleId = currentSubtitle.id;
 
         return currentSubtitle ? currentSubtitle.text : '';
     }
@@ -173,6 +175,13 @@ const App = () => {
     const handleClickMuteToggle = () => {
         videoRef.current.muted = !videoRef.current.muted;
         setIsMuted(videoRef.current.muted);
+
+        if (videoRef.current.muted) {
+            lastVolume = volume;
+            setVolume(0);
+        } else {
+            setVolume(lastVolume);
+        }
     }
 
     const handleChangeVolume = (e) => {
@@ -180,6 +189,17 @@ const App = () => {
             const newVolume = parseFloat(e.target.value);
             videoRef.current.volume = newVolume;
             setVolume(newVolume);
+
+            lastVolume = newVolume;
+
+            if (newVolume === 0) {
+                videoRef.current.muted = true;
+                setIsMuted(true);
+            } else {
+
+                videoRef.current.muted = false;
+                setIsMuted(false);
+            }
         }
     };
 
@@ -219,6 +239,12 @@ const App = () => {
         setIsShowHideSubtitleList(!isShowHideSubtitleList);
     }
 
+    const handleSwitchToVideoSubtitle = (time) => {
+        if (videoRef.current) {
+            videoRef.current.currentTime = parseFloat(timeToSeconds(time));
+        }
+    }
+
     //endregion
 
     useEffect(() => {
@@ -244,11 +270,12 @@ const App = () => {
         };
     }, [setIsMouseMoving]);
 
-    function handleSwitchToVideoSubtitle(time) {
-        if (videoRef.current) {
-            videoRef.current.currentTime = parseFloat(timeToSeconds(time));
-        }
-    }
+    // useEffect(() => {
+    //     // Clean up the app element setting when the component unmounts
+    //     return () => {
+    //         Modal.setAppElement(null);
+    //     };
+    // }, []);
 
     //-------------------------------------------------------
 
@@ -499,7 +526,8 @@ const App = () => {
                                                         <span className="hidden m1 transition-all">▶</span>
                                                         <div className="flex-1 text-center">{item.startTime.split(',')[0]}</div>
                                                     </div>
-                                                    <div data-balloon-pos="up" aria-label={subtitleSecondData ? subtitleSecondData.find((sec) => sec.id === item.id)?.text : ""} className='textBox ml-1 flex-1' dangerouslySetInnerHTML={{__html: item.text}}></div>
+                                                    <div className='ml-1 flex-1 self-center' dangerouslySetInnerHTML={{__html: item.text}}></div>
+                                                    {/*<div data-balloon-pos="up" aria-label={subtitleSecondData ? subtitleSecondData.find((sec) => sec.id === item.id)?.text : ""} className='textBox ml-1 flex-1' dangerouslySetInnerHTML={{__html: item.text}}></div>*/}
                                                 </div>
                                             </li>
                                         ))
@@ -511,7 +539,7 @@ const App = () => {
                 </div>
             </div>
 
-            <Modal isOpen={isModalOpen} onRequestClose={closeModal} style={{
+            <Modal appElement={document.getElementById('root')} isOpen={isModalOpen} onRequestClose={closeModal} style={{
                 content: {
                     maxWidth: '400px', // Set the maximum width of the modal content
                     margin: 'auto',    // Center the modal horizontally
