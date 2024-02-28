@@ -9,6 +9,7 @@ import {ReactComponent as FullScreenIcon} from './icons/fullscreen.svg';
 import {ReactComponent as SubtitleIcon} from './icons/subtitle.svg';
 import {ReactComponent as SettingsIcon} from './icons/settings.svg';
 import {ReactComponent as UploadIcon} from './icons/upload.svg';
+// import {AutoSizer, List} from "react-virtualized";
 
 const App = () => {
     let isActiveProgress = false;
@@ -250,6 +251,43 @@ const App = () => {
     }
 
     //-------------------------------------------------------
+
+    // const rowRenderer = ({ index, key, style }) => {
+    //     // Check if itemHeights[index] is a valid number
+    //     const height = typeof itemHeights[index] === 'number' ? itemHeights[index] : 50;
+    //
+    //     // Determine row class based on index
+    //     const rowClass = index % 2 === 0 ? 'even-row' : 'odd-row';
+    //
+    //     return (
+    //         <div key={key} style={{ ...style, height }} className={rowClass}>
+    //             <div>
+    //                 <strong>{rowClass}</strong>
+    //             </div>
+    //             <div>{data[index]}</div>
+    //         </div>
+    //     );
+    // };
+
+    // function rowRenderer1({
+    //                          key, // Unique key within array of rows
+    //                          index, // Index of row within collection
+    //                          isScrolling, // The List is currently being scrolled
+    //                          isVisible, // This row is visible within the List (e.g. it is not an overscanned row)
+    //                          style, // Style object to be applied to row (to position it)
+    //                      }) {
+    //     return (
+    //         <div key={key} style={style} className={`subtitle-item ${activeSubtitleId === subtitleFirstData[index].id ? 'subtitle-item-active' : ''} flex-1 p-1 mr-1 ml-1 mt-1`}>
+    //             <div className='timeBox' onClick={() => handleSwitchToVideoSubtitle(subtitleFirstData[index].startTime)}>
+    //                 <span className="hidden m1 transition-all">▶</span>
+    //                 <div className="flex-1 text-center">{subtitleFirstData[index].startTime.split(',')[0]}</div>
+    //             </div>
+    //             <div data-balloon-pos="up" aria-label={subtitleSecondData ? subtitleSecondData.find((sec) => sec.id === subtitleFirstData[index].id)?.text : ""} className='textBox ml-1 flex-1' dangerouslySetInnerHTML={{__html: subtitleFirstData[index].text}}></div>
+    //         </div>
+    //     );
+    // }
+
+    //-------------------------------------------------------
     return (
         <>
             <div className='z-player nex-auto-size flex-col'>
@@ -432,6 +470,26 @@ const App = () => {
                                 </div>
                             </div>
                             <div className="nex-setting nex-setting-localSubtitle" data-index="40">
+                                {/*<AutoSizer>*/}
+                                {/*    {({height, width}) => (*/}
+                                {/*        <List*/}
+                                {/*            height={height}*/}
+                                {/*            rowCount={subtitleFirstData.length}*/}
+                                {/*            rowHeight={20}*/}
+                                {/*            rowRenderer={rowRenderer}*/}
+                                {/*            width={width}*/}
+                                {/*        />*/}
+                                {/*    )}*/}
+                                {/*</AutoSizer>*/}
+
+                                {/*<List*/}
+                                {/*    width={350}*/}
+                                {/*    height={600}*/}
+                                {/*    rowCount={subtitleFirstData.length}*/}
+                                {/*    rowHeight={20}*/}
+                                {/*    rowRenderer={rowRenderer}*/}
+                                {/*/>*/}
+
                                 <ul>
                                     {
                                         subtitleFirstData.map((item, index) => (
