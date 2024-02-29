@@ -10,7 +10,6 @@ import {ReactComponent as SubtitleListIcon} from './icons/subtitle_list.svg';
 import {ReactComponent as SubtitleIcon} from './icons/subtitle.svg';
 import {ReactComponent as SettingsIcon} from './icons/settings.svg';
 import {ReactComponent as UploadIcon} from './icons/upload.svg';
-import {isVisible} from "@testing-library/user-event/dist/utils";
 // import {AutoSizer, List} from "react-virtualized";
 
 let isActiveProgress = false;
