@@ -440,24 +440,22 @@ code {
 .subtitle-sidebar {
     padding: 0;
     background: rgba(0, 0, 0, 0.9);
-    /*display: flex;*/
     align-items: center;
     justify-content: center;
-    /*position: absolute;*/
     z-index: 200;
     right: 0;
     top: 0;
     height: 100%;
-    width: 0;
-    opacity: 1;
+    width: 350px;
     text-align: match-parent;
     overflow: hidden;
     pointer-events: auto;
     transition: all 0.2s ease-in-out;
+    display: none;
 }
 
 .subtitle-sidebar-visible {
-    width: 350px;
+    display: inline;
 }
 
 .subtitle-sidebar .subtitle-sidebar-inner {
@@ -465,9 +463,7 @@ code {
     top: 0;
     margin: 5px;
     bottom: 0;
-    /*width: 100%;*/
     height: 100%;
-    /*background: rgba(0, 0, 0, 0.9);*/
     transition: all 0.2s ease-in-out;
     overflow: auto;
     z-index: 2200;
