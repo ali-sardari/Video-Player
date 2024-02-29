@@ -14,10 +14,14 @@ import {ReactComponent as UploadIcon} from "./icons/upload.svg";
 let isActiveProgress = false;
 let lastVolume = 0;
 let activeSubtitleId = 0;
+let repeatCount = 3;
+let repeat_StartTime = 0;
+let repeat_EndTime = 0;
 
 const App = () => {
     const videoRef = useRef(null);
     const listItemToFocusRef = useRef();
+    const listRef = useRef();
 
     const [subtitleFirstData, setSubtitleFirstData] = useState([]);
     const [subtitleSecondData, setSubtitleSecondData] = useState([]);
@@ -32,6 +36,7 @@ const App = () => {
     const [isShowHideSubtitles, setIsShowHideSubtitles] = useState(true);
     const [isShowHideSettings, setIsShowHideSettings] = useState(false);
     const [isShowHideSubtitleList, setIsShowHideSubtitleList] = useState(false);
+    const [isScrolling, setIsScrolling] = useState(false);
 
     //region Modal (openModal, openModal)
     const openModal = () => {
@@ -92,6 +97,19 @@ const App = () => {
 
         if (videoRef.current.currentTime === durationTime && durationTime !== 0) {
             setIsPlaying(false);
+        }
+
+        if (repeat_StartTime !== repeat_EndTime) {
+            if (videoRef.current.currentTime >= repeat_EndTime) {
+                videoRef.current.currentTime = repeat_StartTime;
+                repeatCount -=1;
+            }
+
+            if (repeatCount === 0) {
+                repeat_StartTime = 0;
+                repeat_EndTime = 0;
+                repeatCount = 3;
+            }
         }
     };
 
@@ -158,6 +176,19 @@ const App = () => {
     //endregion
 
     //region scroll to active subtitle
+    const handleScroll = () => {
+        console.log("handleScroll")
+        setIsScrolling(true);
+        // Additional logic if needed during scrolling
+    };
+
+    const handleScrollEnd = () => {
+        console.log("handleScrollEnd")
+
+        setIsScrolling(false);
+        // Additional logic when scrolling ends
+    };
+
     function isInViewport(element) {
         const rect = element.getBoundingClientRect();
         return (
@@ -170,6 +201,7 @@ const App = () => {
 
     function focusOnListItem() {
         if (
+            !isScrolling &&
             listItemToFocusRef.current &&
             !isInViewport(listItemToFocusRef.current) &&
             isShowHideSubtitleList
@@ -180,6 +212,40 @@ const App = () => {
             });
         }
     }
+
+    // useEffect(() => {
+    //     console.log("handleScroll")
+    //
+    //     // Attach scroll event listeners
+    //     window.addEventListener('scroll', handleScroll);
+    //     window.addEventListener('scrollend', handleScrollEnd);
+    //
+    //     // Cleanup event listeners on component unmount
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll);
+    //         window.removeEventListener('scrollend', handleScrollEnd);
+    //     };
+    // }, []);
+
+    useEffect(() => {
+        // Attach scroll event listener to the ul element
+        if (listRef.current) {
+            listRef.current.addEventListener('scroll', handleScroll);
+        }
+
+        // Cleanup event listener on component unmount
+        return () => {
+            if (listRef.current) {
+                listRef.current.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        console.log("isScrolling ->",isScrolling);
+
+        focusOnListItem();
+    }, [isScrolling]);
 
     //endregion
 
@@ -274,9 +340,13 @@ const App = () => {
         setIsShowHideSubtitleList(!isShowHideSubtitleList);
     };
 
-    const handleSwitchToVideoSubtitle = (time) => {
+    const handleSwitchToVideoSubtitle = (startTime, endTime) => {
+        console.log("startTime: %s , endTime: %s", timeToSeconds(startTime), timeToSeconds(endTime))
+        repeat_StartTime=timeToSeconds(startTime);
+        repeat_EndTime=timeToSeconds(endTime);
+
         if (videoRef.current) {
-            videoRef.current.currentTime = parseFloat(timeToSeconds(time));
+            videoRef.current.currentTime = parseFloat(timeToSeconds(startTime));
         }
     };
 
@@ -303,7 +373,7 @@ const App = () => {
         return () => {
             document.removeEventListener("mousemove", handleMouseMove);
         };
-    }, [setIsMouseMoving]);
+    }, [isMouseMoving]);
 
     //-------------------------------------------------------
     return (
@@ -665,7 +735,7 @@ const App = () => {
                     className={`subtitle-sidebar ${isShowHideSubtitleList ? "subtitle-sidebar-visible" : ""} w-[-350px]`}
                     data-testid="div-show-hide-subtitle-list"
                 >
-                    <div className={`subtitle-sidebar-inner`}>
+                    <div className={`subtitle-sidebar-inner`} ref={listRef}>
                         <ul>
                             {subtitleFirstData.map((item, index) => (
                                 <li key={index}>
@@ -678,7 +748,7 @@ const App = () => {
                                         <div
                                             className="timeBox"
                                             onClick={() =>
-                                                handleSwitchToVideoSubtitle(item.startTime)
+                                                handleSwitchToVideoSubtitle(item.startTime, item.endTime)
                                             }
                                         >
                                             <span className="hidden m1 transition-all">▶</span>
