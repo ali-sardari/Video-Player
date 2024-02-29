@@ -19,6 +19,8 @@ let activeSubtitleId = 0;
 
 const App = () => {
     const videoRef = useRef(null);
+    const listItemToFocusRef = useRef();
+
     const [subtitleFirstData, setSubtitleFirstData] = useState([]);
     const [subtitleSecondData, setSubtitleSecondData] = useState([]);
     const [durationTime, setDurationTime] = useState(0);
@@ -144,7 +146,27 @@ const App = () => {
 
         if (type === 'first' && currentSubtitle) activeSubtitleId = currentSubtitle.id;
 
+        focusOnListItem();
         return currentSubtitle ? currentSubtitle.text : '';
+    }
+
+    //endregion
+
+    //region scroll to active subtitle
+    function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    function focusOnListItem() {
+        if (listItemToFocusRef.current && !isInViewport(listItemToFocusRef.current) && isShowHideSubtitleList) {
+            listItemToFocusRef.current.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
     }
 
     //endregion
@@ -309,6 +331,7 @@ const App = () => {
     //     );
     // }
 
+
     //-------------------------------------------------------
     return (
         <>
@@ -383,12 +406,12 @@ const App = () => {
                                 </div>
                                 <div aria-label={isShowHideSubtitles ? "Hide subtitle" : "Show subtitle"} className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={handleToggleShowHideSubtitle}>
                                     <i className="nex-icon nex-icon-subtitle">
-                                        <SubtitleIcon className={`${isShowHideSubtitles?'icon-active':'' }`}/>
+                                        <SubtitleIcon className={`${isShowHideSubtitles ? 'icon-active' : ''}`}/>
                                     </i>
                                 </div>
                                 <div aria-label={isShowHideSubtitleList ? "Hide the full subtitle" : "Show the full subtitle"} className={`nex-control nex-control-subtitle`} data-balloon-pos="up" data-index="30" onClick={handleToggleShowHideSubtitleList}>
                                     <i className="nex-icon nex-icon-subtitle">
-                                        <SubtitleListIcon className={`${isShowHideSubtitleList?'icon-active':'' }`}/>
+                                        <SubtitleListIcon className={`${isShowHideSubtitleList ? 'icon-active' : ''}`}/>
                                     </i>
                                 </div>
                                 <div aria-label="Show setting" className="nex-control nex-control-setting" data-balloon-pos="up" data-index="40" onClick={handleToggleShowHideSettings}>
@@ -482,20 +505,19 @@ const App = () => {
                 <div className={`subtitle-sidebar ${isShowHideSubtitleList ? 'subtitle-sidebar-visible' : ''} w-[-350px]`} data-testid='div-show-hide-subtitle-list'>
                     <div className={`subtitle-sidebar-inner`}>
                         <ul>
-                            {
-                                subtitleFirstData.map((item, index) => (
-                                    <li key={index}>
-                                        <div className={`subtitle-item ${activeSubtitleId === item.id ? 'subtitle-item-active' : ''} flex-1 p-1 mr-1 ml-1 mt-1`}>
-                                            <div className='timeBox' onClick={() => handleSwitchToVideoSubtitle(item.startTime)}>
-                                                <span className="hidden m1 transition-all">▶</span>
-                                                <div className="flex-1 text-center">{item.startTime.split(',')[0]}</div>
-                                            </div>
-                                            <div className='ml-1 flex-1 self-center' dangerouslySetInnerHTML={{__html: item.text}}></div>
-                                            {/*<div data-balloon-pos="up" aria-label={subtitleSecondData ? subtitleSecondData.find((sec) => sec.id === item.id)?.text : ""} className='textBox ml-1 flex-1' dangerouslySetInnerHTML={{__html: item.text}}></div>*/}
+                            {subtitleFirstData.map((item, index) => (
+                                <li key={index}>
+                                    <div
+                                        ref={activeSubtitleId === item.id ? listItemToFocusRef : null}
+                                        className={`subtitle-item ${activeSubtitleId === item.id ? 'subtitle-item-active' : ''} flex-1 p-1 mr-1 ml-1 mt-1`}>
+                                        <div className='timeBox' onClick={() => handleSwitchToVideoSubtitle(item.startTime)}>
+                                            <span className="hidden m1 transition-all">▶</span>
+                                            <div className="flex-1 text-center">{item.startTime.split(',')[0]}</div>
                                         </div>
-                                    </li>
-                                ))
-                            }
+                                        <div className='ml-1 flex-1 self-center' dangerouslySetInnerHTML={{__html: item.text}}></div>
+                                    </div>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>
