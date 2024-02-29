@@ -99,10 +99,11 @@ code {
 
 .nex-video-player {
     display: flex;
+    flex: 1;
     position: relative;
     margin: 0 auto;
     z-index: 20;
-    width: 100%;
+    /*width: 100%;*/
     height: 100%;
     outline: 0;
     zoom: 1;
@@ -437,17 +438,17 @@ code {
 }
 
 .subtitle-sidebar {
-    padding: 0px;
+    padding: 0;
     background: rgba(0, 0, 0, 0.9);
-    display: flex;
+    /*display: flex;*/
     align-items: center;
     justify-content: center;
-    position: absolute;
+    /*position: absolute;*/
     z-index: 200;
     right: 0;
     top: 0;
     height: 100%;
-    width: 0px;
+    width: 0;
     opacity: 1;
     text-align: match-parent;
     overflow: hidden;
@@ -464,31 +465,25 @@ code {
     top: 0;
     margin: 5px;
     bottom: 0;
-    width: 100%;
+    /*width: 100%;*/
     height: 100%;
-    font-size: 12px;
     /*background: rgba(0, 0, 0, 0.9);*/
     transition: all 0.2s ease-in-out;
     overflow: auto;
     z-index: 2200;
     pointer-events: auto;
-}
-
-.subtitle-sidebar .subtitle-sidebar-inner .subtitle-sidebar-body {
-    overflow-y: auto;
-    width: 100%;
-    height: 100%;
-}
-
-.subtitle-sidebar .subtitle-sidebar-inner .subtitle-sidebar-body * {
     font-family: Tahoma, serif;
     font-size: 14px;
 }
 
 .subtitle-item-active {
-    background: rgba(85, 184, 255, 0.4) !important;
+    background: rgba(123, 189, 255, 0.4) !important;
     color: #dcffef;
     font-weight: bold;
+}
+
+.icon-active {
+    fill: #00e925 !important;
 }
 
 .subtitle-item {

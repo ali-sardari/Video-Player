@@ -6,9 +6,11 @@ import {ReactComponent as UnMutedIcon} from './icons/unmuted.svg';
 import {ReactComponent as StopIcon} from './icons/stop.svg';
 import {ReactComponent as PlayIcon} from './icons/play.svg';
 import {ReactComponent as FullScreenIcon} from './icons/fullscreen.svg';
+import {ReactComponent as SubtitleListIcon} from './icons/subtitle_list.svg';
 import {ReactComponent as SubtitleIcon} from './icons/subtitle.svg';
 import {ReactComponent as SettingsIcon} from './icons/settings.svg';
 import {ReactComponent as UploadIcon} from './icons/upload.svg';
+import {isVisible} from "@testing-library/user-event/dist/utils";
 // import {AutoSizer, List} from "react-virtualized";
 
 let isActiveProgress = false;
@@ -270,13 +272,6 @@ const App = () => {
         };
     }, [setIsMouseMoving]);
 
-    // useEffect(() => {
-    //     // Clean up the app element setting when the component unmounts
-    //     return () => {
-    //         Modal.setAppElement(null);
-    //     };
-    // }, []);
-
     //-------------------------------------------------------
 
     // const rowRenderer = ({ index, key, style }) => {
@@ -317,12 +312,11 @@ const App = () => {
     //-------------------------------------------------------
     return (
         <>
-            <div className='z-player nex-auto-size flex-col'>
-                <div className='nex-video-player nex-subtitle-show nex-layer-show nex-control-show'>
+            <div className='z-player nex-auto-size flex-row'>
+                <div className='nex-video-player nex-subtitle-show nex-layer-show nex-control-show flex-1'>
                     <video
                         className='nex-video'
                         ref={videoRef}
-                        /*muted*/
                         autoPlay
                         onDoubleClick={handleToggleFullScreen}
                         onClick={handleClickPlayPause}
@@ -331,10 +325,10 @@ const App = () => {
                     >
                     </video>
                     <div data-testid='div-show-hide-subtitle' className={isShowHideSubtitles ? 'subtitles' : 'none'}>
-                        <span className='subtitle-en' dangerouslySetInnerHTML={{__html: currentFirstSubtitle}}></span>
-                        <span className='subtitle-fa' dangerouslySetInnerHTML={{__html: currentSecondSubtitle}}></span>
+                        <span className={`subtitle-en ${subtitleFirstData.length > 0 ? 'visible' : 'hidden'}`} dangerouslySetInnerHTML={{__html: currentFirstSubtitle}}></span>
+                        <span className={`subtitle-fa ${subtitleSecondData.length > 0 ? 'visible' : 'hidden'}`} dangerouslySetInnerHTML={{__html: currentSecondSubtitle}}></span>
                     </div>
-                    <div data-testid='div-video-progress-and-controls' className={`nex-bottom ${isMouseMoving || !isPlaying ? 'opacity-90' : 'opacity-0'}`}>
+                    <div data-testid='div-controls-video-progress-' className={`nex-bottom ${isMouseMoving || !isPlaying ? 'opacity-90' : 'opacity-0'}`}>
                         <div data-testid='div-video-progress-bar' className="nex-progress">
                             <div className="nex-control nex-control-progress" data-index="10">
                                 <input
@@ -389,12 +383,12 @@ const App = () => {
                                 </div>
                                 <div aria-label={isShowHideSubtitles ? "Hide subtitle" : "Show subtitle"} className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={handleToggleShowHideSubtitle}>
                                     <i className="nex-icon nex-icon-subtitle">
-                                        <SubtitleIcon/>
+                                        <SubtitleIcon className={`${isShowHideSubtitles?'icon-active':'' }`}/>
                                     </i>
                                 </div>
-                                <div aria-label={isShowHideSubtitleList ? "Show the full subtitle" : "Show the full subtitle"} className="nex-control nex-control-subtitle" data-balloon-pos="up" data-index="30" onClick={handleToggleShowHideSubtitleList}>
+                                <div aria-label={isShowHideSubtitleList ? "Hide the full subtitle" : "Show the full subtitle"} className={`nex-control nex-control-subtitle`} data-balloon-pos="up" data-index="30" onClick={handleToggleShowHideSubtitleList}>
                                     <i className="nex-icon nex-icon-subtitle">
-                                        <SubtitleIcon/>
+                                        <SubtitleListIcon className={`${isShowHideSubtitleList?'icon-active':'' }`}/>
                                     </i>
                                 </div>
                                 <div aria-label="Show setting" className="nex-control nex-control-setting" data-balloon-pos="up" data-index="40" onClick={handleToggleShowHideSettings}>
@@ -485,56 +479,24 @@ const App = () => {
                         </div>
                     </div>
                 </div>
-                <div data-testid='div-show-hide-subtitle-list' className={`subtitle-sidebar ${isShowHideSubtitleList ? 'subtitle-sidebar-visible' : ''}`}>
-                    <div className={`subtitle-sidebar-inner nex-backdrop-filter`}>
-                        <div className="subtitle-sidebar-body">
-                            <span onClick={handleToggleShowHideSubtitleList}>Close</span>
-                            <div className="nex-setting nex-setting-localVideo" data-index="30">
-                                <div className="nex-setting-header">Local Video</div>
-                                <div className="nex-setting-upload">
-                                    <div className="nex-upload-btn" style={{position: 'relative'}}>Open<input style={{position: 'absolute', width: '100%', height: '100%', left: '0px', top: '0px', opacity: 0}} type="file"/></div>
-                                    <div className="nex-upload-value"></div>
-                                </div>
-                            </div>
-                            <div className="nex-setting nex-setting-localSubtitle" data-index="40">
-                                {/*<AutoSizer>*/}
-                                {/*    {({height, width}) => (*/}
-                                {/*        <List*/}
-                                {/*            height={height}*/}
-                                {/*            rowCount={subtitleFirstData.length}*/}
-                                {/*            rowHeight={20}*/}
-                                {/*            rowRenderer={rowRenderer}*/}
-                                {/*            width={width}*/}
-                                {/*        />*/}
-                                {/*    )}*/}
-                                {/*</AutoSizer>*/}
-
-                                {/*<List*/}
-                                {/*    width={350}*/}
-                                {/*    height={600}*/}
-                                {/*    rowCount={subtitleFirstData.length}*/}
-                                {/*    rowHeight={20}*/}
-                                {/*    rowRenderer={rowRenderer}*/}
-                                {/*/>*/}
-
-                                <ul>
-                                    {
-                                        subtitleFirstData.map((item, index) => (
-                                            <li key={index}>
-                                                <div className={`subtitle-item ${activeSubtitleId === item.id ? 'subtitle-item-active' : ''} flex-1 p-1 mr-1 ml-1 mt-1`}>
-                                                    <div className='timeBox' onClick={() => handleSwitchToVideoSubtitle(item.startTime)}>
-                                                        <span className="hidden m1 transition-all">▶</span>
-                                                        <div className="flex-1 text-center">{item.startTime.split(',')[0]}</div>
-                                                    </div>
-                                                    <div className='ml-1 flex-1 self-center' dangerouslySetInnerHTML={{__html: item.text}}></div>
-                                                    {/*<div data-balloon-pos="up" aria-label={subtitleSecondData ? subtitleSecondData.find((sec) => sec.id === item.id)?.text : ""} className='textBox ml-1 flex-1' dangerouslySetInnerHTML={{__html: item.text}}></div>*/}
-                                                </div>
-                                            </li>
-                                        ))
-                                    }
-                                </ul>
-                            </div>
-                        </div>
+                <div className={`subtitle-sidebar ${isShowHideSubtitleList ? 'subtitle-sidebar-visible' : ''} w-[-350px]`} data-testid='div-show-hide-subtitle-list'>
+                    <div className={`subtitle-sidebar-inner`}>
+                        <ul>
+                            {
+                                subtitleFirstData.map((item, index) => (
+                                    <li key={index}>
+                                        <div className={`subtitle-item ${activeSubtitleId === item.id ? 'subtitle-item-active' : ''} flex-1 p-1 mr-1 ml-1 mt-1`}>
+                                            <div className='timeBox' onClick={() => handleSwitchToVideoSubtitle(item.startTime)}>
+                                                <span className="hidden m1 transition-all">▶</span>
+                                                <div className="flex-1 text-center">{item.startTime.split(',')[0]}</div>
+                                            </div>
+                                            <div className='ml-1 flex-1 self-center' dangerouslySetInnerHTML={{__html: item.text}}></div>
+                                            {/*<div data-balloon-pos="up" aria-label={subtitleSecondData ? subtitleSecondData.find((sec) => sec.id === item.id)?.text : ""} className='textBox ml-1 flex-1' dangerouslySetInnerHTML={{__html: item.text}}></div>*/}
+                                        </div>
+                                    </li>
+                                ))
+                            }
+                        </ul>
                     </div>
                 </div>
             </div>
