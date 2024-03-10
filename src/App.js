@@ -182,12 +182,12 @@ const App = () => {
         // Additional logic if needed during scrolling
     };
 
-    const handleScrollEnd = () => {
-        console.log("handleScrollEnd")
-
-        setIsScrolling(false);
-        // Additional logic when scrolling ends
-    };
+    // const handleScrollEnd = () => {
+    //     console.log("handleScrollEnd")
+    //
+    //     setIsScrolling(false);
+    //     // Additional logic when scrolling ends
+    // };
 
     function isInViewport(element) {
         const rect = element.getBoundingClientRect();
