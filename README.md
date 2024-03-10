@@ -1,4 +1,5 @@
 # Media Player React App
+[![Netlify Status](https://api.netlify.com/api/v1/badges/df0ab646-434d-40e7-88b6-b5887d8b2ec1/deploy-status)](https://app.netlify.com/sites/lingo-quest/deploys)
 
 A React-based Media player application with features like subtitles, settings, and more.
 
