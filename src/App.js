@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import SubtitlesParser from "subtitles-parser";
 import Modal from "react-modal";
 import {ReactComponent as MutedIcon} from "./icons/muted.svg";
@@ -37,6 +37,20 @@ const App = () => {
     const [isShowHideSettings, setIsShowHideSettings] = useState(false);
     const [isShowHideSubtitleList, setIsShowHideSubtitleList] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
+
+    const focusOnListItem = useCallback(() => {
+        if (
+            !isScrolling &&
+            listItemToFocusRef.current &&
+            !isInViewport(listItemToFocusRef.current) &&
+            isShowHideSubtitleList
+        ) {
+            listItemToFocusRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+        }
+    }, [isScrolling, isShowHideSubtitleList]); // Empty dependency array if focusOnListItem doesn't depend on external variables
 
     //region Modal (openModal, openModal)
     const openModal = () => {
@@ -102,13 +116,13 @@ const App = () => {
         if (repeat_StartTime !== repeat_EndTime) {
             if (videoRef.current.currentTime >= repeat_EndTime) {
                 videoRef.current.currentTime = repeat_StartTime;
-                repeatCount -=1;
+                repeatCount -= 1;
             }
 
             if (repeatCount === 0) {
                 repeat_StartTime = 0;
                 repeat_EndTime = 0;
-                repeatCount = 3;
+                repeatCount = 2;
             }
         }
     };
@@ -176,11 +190,17 @@ const App = () => {
     //endregion
 
     //region scroll to active subtitle
-    const handleScroll = () => {
+    // const handleScroll = () => {
+    //     console.log("handleScroll")
+    //     setIsScrolling(true);
+    //     // Additional logic if needed during scrolling
+    // };
+
+    const handleScroll = useCallback((event) => {
         console.log("handleScroll")
         setIsScrolling(true);
-        // Additional logic if needed during scrolling
-    };
+    }, []);
+
 
     // const handleScrollEnd = () => {
     //     console.log("handleScrollEnd")
@@ -199,19 +219,19 @@ const App = () => {
         );
     }
 
-    function focusOnListItem() {
-        if (
-            !isScrolling &&
-            listItemToFocusRef.current &&
-            !isInViewport(listItemToFocusRef.current) &&
-            isShowHideSubtitleList
-        ) {
-            listItemToFocusRef.current.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-            });
-        }
-    }
+    // function focusOnListItem() {
+    //     if (
+    //         !isScrolling &&
+    //         listItemToFocusRef.current &&
+    //         !isInViewport(listItemToFocusRef.current) &&
+    //         isShowHideSubtitleList
+    //     ) {
+    //         listItemToFocusRef.current.scrollIntoView({
+    //             behavior: "smooth",
+    //             block: "center",
+    //         });
+    //     }
+    // }
 
     // useEffect(() => {
     //     console.log("handleScroll")
@@ -227,25 +247,50 @@ const App = () => {
     //     };
     // }, []);
 
+    // useEffect(() => {
+    //     // Attach scroll event listener to the ul element
+    //     if (listRef.current) {
+    //         listRef.current.addEventListener('scroll', handleScroll);
+    //     }
+    //
+    //     // Cleanup event listener on component unmount
+    //     return () => {
+    //         if (listRef.current) {
+    //             listRef.current.removeEventListener('scroll', handleScroll);
+    //         }
+    //     };
+    // }, []);
+
     useEffect(() => {
         // Attach scroll event listener to the ul element
-        if (listRef.current) {
-            listRef.current.addEventListener('scroll', handleScroll);
+        const listRefCurrent = listRef.current;
+
+        if (listRefCurrent) {
+            listRefCurrent.addEventListener('scroll', handleScroll);
         }
 
         // Cleanup event listener on component unmount
         return () => {
-            if (listRef.current) {
-                listRef.current.removeEventListener('scroll', handleScroll);
+            if (listRefCurrent) {
+                listRefCurrent.removeEventListener('scroll', handleScroll);
             }
         };
-    }, []);
+    }, [listRef, handleScroll]);
+
+
 
     useEffect(() => {
-        console.log("isScrolling ->",isScrolling);
+        console.log("isScrolling ->", isScrolling);
 
         focusOnListItem();
-    }, [isScrolling]);
+    }, [isScrolling, focusOnListItem]);
+
+
+    // useEffect(() => {
+    //     console.log("isScrolling ->", isScrolling);
+    //
+    //     focusOnListItem();
+    // }, [isScrolling]);
 
     //endregion
 
@@ -342,8 +387,8 @@ const App = () => {
 
     const handleSwitchToVideoSubtitle = (startTime, endTime) => {
         console.log("startTime: %s , endTime: %s", timeToSeconds(startTime), timeToSeconds(endTime))
-        repeat_StartTime=timeToSeconds(startTime);
-        repeat_EndTime=timeToSeconds(endTime);
+        repeat_StartTime = timeToSeconds(startTime);
+        repeat_EndTime = timeToSeconds(endTime);
 
         if (videoRef.current) {
             videoRef.current.currentTime = parseFloat(timeToSeconds(startTime));
