@@ -14,7 +14,7 @@ import {ReactComponent as UploadIcon} from "./icons/upload.svg";
 let isActiveProgress = false;
 let lastVolume = 0;
 let activeSubtitleId = 0;
-let repeatCount = 3;
+let repeatCount = 2;
 let repeat_StartTime = 0;
 let repeat_EndTime = 0;
 
