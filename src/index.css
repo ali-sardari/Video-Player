@@ -55,9 +55,20 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+/*.ejoy-sub-clzz {*/
+/*    font-size: 24px !important;*/
+/*    color: white !important;*/
+/*}*/
+
 .ejoy-sub-clzz {
+    cursor: pointer;
+    background: transparent !important;
     font-size: 24px !important;
     color: white !important;
+}
+
+.ejoy-sub-clzz:hover {
+    color: #b5ff56 !important;
 }
 
 .subtitles {
@@ -138,16 +149,6 @@ code {
     }
 }
 
-.ejoy-sub-clzz:hover {
-    color: #b5ff56 !important;
-}
- .ejoy-sub-clzz {
-     cursor: pointer;
-     /*lineHeight: 1.2;*/
-     /*font-size: 28px;*/
-     /*color: #FFCC00;*/
-     background: transparent !important;
- }
 /*--------------------------------*/
 
 .nex-video-player {
