@@ -14,7 +14,8 @@ import {ReactComponent as UploadIcon} from "./icons/upload.svg";
 let isActiveProgress = false;
 let lastVolume = 0;
 let activeSubtitleId = 0;
-let repeatCount = 2;
+const repeatCountReset = 1;
+let repeatCount = repeatCountReset;
 let repeat_StartTime = 0;
 let repeat_EndTime = 0;
 
@@ -119,10 +120,10 @@ const App = () => {
                 repeatCount -= 1;
             }
 
-            if (repeatCount === 0) {
+            if (repeatCount === 1) {
                 repeat_StartTime = 0;
                 repeat_EndTime = 0;
-                repeatCount = 2;
+                repeatCount = repeatCountReset;
             }
         }
     };
@@ -276,7 +277,6 @@ const App = () => {
             }
         };
     }, [listRef, handleScroll]);
-
 
 
     useEffect(() => {
