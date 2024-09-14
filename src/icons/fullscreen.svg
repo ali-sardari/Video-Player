@@ -1,6 +1,9 @@
-<svg height="36" viewBox="0 0 36 36" width="36" xmlns="http://www.w3.org/2000/svg">
-    <path d="m 10,16 2,0 0,-4 4,0 0,-2 L 10,10 l 0,6 0,0 z"></path>
-    <path d="m 20,10 0,2 4,0 0,4 2,0 L 26,10 l -6,0 0,0 z"></path>
-    <path d="m 24,24 -4,0 0,2 L 26,26 l 0,-6 -2,0 0,4 0,0 z"></path>
-    <path d="M 12,20 10,20 10,26 l 6,0 0,-2 -4,0 0,-4 0,0 z"></path>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+    <g id="surface1">
+        <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 6.667969 10.667969 L 8 10.667969 L 8 8 L 10.667969 8 L 10.667969 6.667969 L 6.667969 6.667969 Z M 6.667969 10.667969 "/>
+        <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 13.332031 6.667969 L 13.332031 8 L 16 8 L 16 10.667969 L 17.332031 10.667969 L 17.332031 6.667969 Z M 13.332031 6.667969 "/>
+        <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 16 16 L 13.332031 16 L 13.332031 17.332031 L 17.332031 17.332031 L 17.332031 13.332031 L 16 13.332031 Z M 16 16 "/>
+        <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 8 13.332031 L 6.667969 13.332031 L 6.667969 17.332031 L 10.667969 17.332031 L 10.667969 16 L 8 16 Z M 8 13.332031 "/>
+    </g>
 </svg>
